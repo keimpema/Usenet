@@ -2,11 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
+    <Authors>Harmen van Keimpema</Authors>
+    <Company />
+    <Description>A library for working with Usenet. It offers an NNTP client, an NZB file parser, and a Yenc decoder.</Description>
+    <PackageProjectUrl>https://github.com/keimpema/Usenet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/keimpema/Usenet</RepositoryUrl>
+    <RepositoryType />
+    <PackageTags>usenet, nntp, nzb, yenc</PackageTags>
+    <PackageId>Usenet</PackageId>
+    <Version>1.0.0</Version>
+    <Product>Usenet</Product>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="Nntp\NntpClient.rfc3977.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.2" />
