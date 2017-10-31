@@ -13,7 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CC3B2071-7B5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8E3D2D44-1804-49A7-9007-CF9E17B30CF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib", "test\Lib\Lib.csproj", "{C1329F59-21B7-4C7C-814F-95201E54143C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib", "test\Lib\Lib.csproj", "{C1329F59-21B7-4C7C-814F-95201E54143C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C32CF571-3C3A-4E1A-8C21-E8F3BA4C6DE0}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+		todo.md = todo.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
