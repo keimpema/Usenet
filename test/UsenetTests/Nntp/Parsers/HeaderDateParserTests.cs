@@ -30,9 +30,7 @@ namespace UsenetTests.Nntp.Parsers
             new object[] {"1 Nov 2017 00:00:00 +0000", new DateTimeOffset(2017, 11, 1, 0, 0, 0, TimeSpan.Zero)},
             new object[] {"1 Dec 2017 00:00:00 +0000", new DateTimeOffset(2017, 12, 1, 0, 0, 0, TimeSpan.Zero)},
 
-            new object[] {"01 May 2017 13 : 55 : 33 +0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
-            new object[] {"01 May 2017 13 : 55 : 33 +0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
-
+            new object[] {"01 May 2017 13 : 55 : 33 +0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)}
         };
 
         public static IEnumerable<object[]> CenturyData = new[]
