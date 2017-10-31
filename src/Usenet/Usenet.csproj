@@ -58,8 +58,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="doxygen" />
-  </Target>
-
 </Project>
