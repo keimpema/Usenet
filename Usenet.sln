@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CC3B2071-7B5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8E3D2D44-1804-49A7-9007-CF9E17B30CF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLib", "test\TestLib\TestLib.csproj", "{C1329F59-21B7-4C7C-814F-95201E54143C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib", "test\Lib\Lib.csproj", "{C1329F59-21B7-4C7C-814F-95201E54143C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
