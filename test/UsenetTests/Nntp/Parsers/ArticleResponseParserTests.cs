@@ -28,7 +28,7 @@ namespace UsenetTests.Nntp.Parsers
                     "Path: pathost!demo!whitehouse!not-for-mail",
                     "From: \"Demo User\" <nobody@example.net>",
                     "",
-                    "This is just a test article.",
+                    "This is just a test article (1).",
                     "With two lines."
                 },
                 new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>",
@@ -38,7 +38,7 @@ namespace UsenetTests.Nntp.Parsers
                         {"From", "\"Demo User\" <nobody@example.net>"},
                     }, new List<string>
                     {
-                        "This is just a test article.",
+                        "This is just a test article (1).",
                         "With two lines."
                     }))
             },
@@ -47,12 +47,12 @@ namespace UsenetTests.Nntp.Parsers
                 222, "123 <123@poster.com>", (int) ArticleRequestType.Body,
                 new[]
                 {
-                    "This is just a test article.",
+                    "This is just a test article (2).",
                     "With two lines."
                 },
                 new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null, new List<string>
                 {
-                    "This is just a test article.",
+                    "This is just a test article (2).",
                     "With two lines."
                 }))
             },
@@ -96,17 +96,18 @@ namespace UsenetTests.Nntp.Parsers
             string responseMessage, 
             int requestType,
             string[] lines, 
-            XSerializable<NntpArticle> expectedArticle)
+            XSerializable<NntpArticle> expected)
         {
+            NntpArticle expectedArticle = expected.Object;
             NntpArticleResponse articleResponse = new ArticleResponseParser((ArticleRequestType)requestType)
                 .Parse(responseCode, responseMessage, lines.ToList());
             NntpArticle actualArticle = articleResponse.Article;
-            Assert.Equal(expectedArticle.Object, actualArticle);
 
-            //Assert.Equal(expectedArticle.Number, actualArticle.Number);
-            //Assert.Equal(expectedArticle.MessageId, actualArticle.MessageId);
-            //Assert.Equal(expectedArticle.Headers, actualArticle.Headers);
-            //Assert.Equal(expectedArticle.Body, actualArticle.Body);
+            Assert.Equal(expectedArticle.Number, actualArticle.Number);
+            Assert.Equal(expectedArticle.MessageId, actualArticle.MessageId);
+            Assert.Equal(expectedArticle.Headers, actualArticle.Headers);
+            Assert.Equal(expectedArticle.Body.ToArray(), actualArticle.Body.ToArray());
+
         }
 
         public static IEnumerable<object[]> InvalidMultiLineParseData = new[]

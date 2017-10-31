@@ -61,8 +61,8 @@ namespace Usenet.Yenc
         {
             long size = footer.GetAndConvert(YencKeywords.Size, long.Parse);
             int part = footer.GetAndConvert(YencKeywords.Part, int.Parse);
-            uint crc32 = footer.GetAndConvert(YencKeywords.Crc32, crc => Convert.ToUInt32(crc, 16));
-            uint partCrc32 = footer.GetAndConvert(YencKeywords.PartCrc32, crc => Convert.ToUInt32(crc, 16));
+            var crc32 = footer.GetAndConvert<uint?>(YencKeywords.Crc32, crc => Convert.ToUInt32(crc, 16));
+            var partCrc32 = footer.GetAndConvert<uint?>(YencKeywords.PartCrc32, crc => Convert.ToUInt32(crc, 16));
 
             return new YencFooter(
                 size > 0 ? size : 0,

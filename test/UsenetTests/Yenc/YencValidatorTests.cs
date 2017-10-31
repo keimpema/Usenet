@@ -45,7 +45,7 @@ namespace UsenetTests.Yenc
 
             ValidationResult result = YencValidator.Validate(article);
             Assert.False(result.IsValid);
-            Assert.NotNull(result.Failures.SingleOrDefault(f => f.Code == errorCode ));
+            Assert.Equal(errorCode, result.Failures.Single().Code);
         }
     }
 }

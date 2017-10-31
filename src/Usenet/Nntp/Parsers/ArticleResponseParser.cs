@@ -99,7 +99,6 @@ namespace Usenet.Nntp.Parsers
                 if (line.Length == 0)
                 {
                     // no more headers (skip empty line)
-                    enumerator.MoveNext();
                     break;
                 }
                 if (char.IsWhiteSpace(line[0]) && prevHeader != null)
