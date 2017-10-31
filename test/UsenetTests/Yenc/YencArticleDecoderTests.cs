@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
+using TestLib;
+using TestLib.Extensions;
 using Usenet.Util;
 using Usenet.Yenc;
 using Xunit;
@@ -12,16 +14,16 @@ namespace UsenetTests.Yenc
 
         public YencDecoderTests(TestData testData)
         {
-            this.testData = testData;
+            this.testData = testData.Initialize(typeof(YencDecoderTests));
         }
 
         [Fact]
         public void SinglePartFileShouldBeDecoded()
         {
-            byte[] expectedData = File.ReadAllBytes(testData.GetFullPath(@"yenc\singlepart\testfile.txt"));
+            byte[] expectedData = testData.GetEmbeddedFile(@"yenc.singlepart.testfile.txt").ReadAllBytes();
 
-            var actualArticle = YencArticleDecoder.Decode(
-                File.ReadAllLines(testData.GetFullPath(@"yenc\singlepart\00000005.ntx"), UsenetEncoding.Default));
+            YencArticle actualArticle = YencArticleDecoder.Decode(
+                testData.GetEmbeddedFile(@"yenc.singlepart.00000005.ntx").ReadAllLines(UsenetEncoding.Default));
 
             Assert.False(actualArticle.Header.IsFilePart);
             Assert.Equal(128, actualArticle.Header.LineLength);
@@ -36,22 +38,24 @@ namespace UsenetTests.Yenc
         public void FilePartShouldBeDecoded()
         {
             const int expectedDataLength = 11250;
-            YencArticle actual = YencArticleDecoder.Decode(
-                File.ReadAllLines(testData.GetFullPath(@"yenc\multipart\00000020.ntx"), UsenetEncoding.Default));
-            Assert.True(actual.Header.IsFilePart);
-            Assert.Equal(expectedDataLength, actual.Data.Length);
+
+            YencArticle actualArticle = YencArticleDecoder.Decode(
+                testData.GetEmbeddedFile(@"yenc.multipart.00000020.ntx").ReadAllLines(UsenetEncoding.Default));
+
+            Assert.True(actualArticle.Header.IsFilePart);
+            Assert.Equal(expectedDataLength, actualArticle.Data.Length);
         }
 
         [Fact]
         public void MultiPartFileShouldBeDecoded()
         {
             const string expectedFileName = "joystick.jpg";
-            byte[] expected = File.ReadAllBytes(testData.GetFullPath(@"yenc\multipart\joystick.jpg"));
+            byte[] expected = testData.GetEmbeddedFile(@"yenc.multipart.joystick.jpg").ReadAllBytes();
 
             YencArticle part1 = YencArticleDecoder.Decode(
-                File.ReadAllLines(testData.GetFullPath(@"yenc\multipart\00000020.ntx"), UsenetEncoding.Default));
+                testData.GetEmbeddedFile(@"yenc.multipart.00000020.ntx").ReadAllLines(UsenetEncoding.Default));
             YencArticle part2 = YencArticleDecoder.Decode(
-                File.ReadAllLines(testData.GetFullPath(@"yenc\multipart\00000021.ntx"), UsenetEncoding.Default));
+                testData.GetEmbeddedFile(@"yenc.multipart.00000021.ntx").ReadAllLines(UsenetEncoding.Default));
 
             using (var actual = new MemoryStream())
             {

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Xml;
+using TestLib;
+using TestLib.Extensions;
 using Usenet.Exceptions;
 using Usenet.Nzb;
 using Usenet.Util;
@@ -15,15 +16,15 @@ namespace UsenetTests.Nzb
 
         public NzbParserTests(TestData testData)
         {
-            this.testData = testData;
+            this.testData = testData.Initialize(typeof(NzbParserTests));
         }
 
         [Theory]
-        [InlineData(@"nzb\sabnzbd.nzb")]
-        [InlineData(@"nzb\sabnzbd-no-namespace.nzb")]
+        [InlineData(@"nzb.sabnzbd.nzb")]
+        [InlineData(@"nzb.sabnzbd-no-namespace.nzb")]
         public void ValidNzbDataShouldBeParsed(string fileName)
         {
-            string nzbData = File.ReadAllText(testData.GetFullPath(fileName), UsenetEncoding.Default);
+            string nzbData = testData.GetEmbeddedFile(fileName).ReadAllText(UsenetEncoding.Default);
             NzbDocument actualDocument = NzbParser.Parse(nzbData);
 
             Assert.Equal("Your File!", actualDocument.MetaData["title"].Single());

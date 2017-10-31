@@ -115,10 +115,9 @@ namespace UsenetTests.Util
                 {2, "deux"}
             };
 
-            //Assert.True(dict1.Equals(dict2));
             Assert.Equal(dict1, dict2);
             Assert.True(dict1 == dict2);
-            Assert.True(dict2.Equals(dict2));
+            Assert.True(dict1.Equals(dict2));
         }
 
         [Fact]
@@ -137,19 +136,5 @@ namespace UsenetTests.Util
             var actual = JsonConvert.DeserializeObject<MultiValueDictionary<int, string>>(json);
             Assert.Equal(expected, actual);
         }
-
-        //[Fact]
-        //public void DictionaryCanBeEnumerated()
-        //{
-        //    var expected = new MultiValueDictionary<int, string>(() => new HashSet<string>())
-        //    {
-        //        {2, "twee"},
-        //        {2, "two"},
-        //        {1, "een"},
-        //        {2, "deux"},
-        //        {1, "one"},
-        //    };
-        //    expected.ToLookup(x => x.Key, x => x.Value.ToImmutableList());
-        //}
     }
 }

@@ -114,12 +114,11 @@ namespace TestClient
 
         private static void TestDownloadNzb(NntpClient client, string nzbFileName)
         {
-            var testData = new TestData();
-            string fullPath = Path.Combine(testData.Directory, "nzb", nzbFileName);
+            string fullPath = Path.Combine(nzbFileName);
             string nzbData = File.ReadAllText(fullPath, UsenetEncoding.Default);
             NzbDocument nzbDocument = NzbParser.Parse(nzbData);
 
-            string downloadDir = Path.Combine(testData.Directory, "downloads", nzbFileName);
+            string downloadDir = Path.Combine("downloads", nzbFileName);
             Directory.CreateDirectory(downloadDir);
 
             log.LogInformation("Downloading nzb {nzbFileName}", nzbFileName);
@@ -159,12 +158,11 @@ namespace TestClient
 
         private static void TestDownloadNzbStreaming(NntpClient client, string nzbFileName)
         {
-            var testData = new TestData();
-            string fullPath = Path.Combine(testData.Directory, "nzb", nzbFileName);
+            string fullPath = Path.Combine(nzbFileName);
             string nzbData = File.ReadAllText(fullPath, UsenetEncoding.Default);
             NzbDocument nzbDocument = NzbParser.Parse(nzbData);
 
-            string downloadDir = Path.Combine(testData.Directory, "downloads", nzbFileName);
+            string downloadDir = Path.Combine("downloads", nzbFileName);
             Directory.CreateDirectory(downloadDir);
 
             var sw = new Stopwatch();
