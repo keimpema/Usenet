@@ -3,6 +3,5 @@
 * xml comments
 * resx files
 * readme
-* upload to github
-* create nuget package and CI deploy to myget
+* create nuget package
 * add decompressing of responses
