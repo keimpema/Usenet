@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TestLib;
+using Lib;
 using Usenet.Nntp;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Parsers;
@@ -17,7 +17,7 @@ namespace UsenetTests.Nntp.Writers
         {
             new object[] 
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "1@example.com", null, EmptyList<string>.Instance)), new []
+                new XSerializable<NntpArticle>(new NntpArticle(0, "1@example.com", null, new List<string>(0))), new []
                 {
                     "Message-ID: <1@example.com>",
                     "",
@@ -26,7 +26,7 @@ namespace UsenetTests.Nntp.Writers
             },
             new object[]
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "<2@example.com>", null, EmptyList<string>.Instance)), new []
+                new XSerializable<NntpArticle>(new NntpArticle(0, "<2@example.com>", null, new List<string>(0))), new []
                 {
                     "Message-ID: <2@example.com>",
                     "",

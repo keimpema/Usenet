@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using TestLib;
-using TestLib.Extensions;
+using Lib;
+using Lib.Extensions;
 using Usenet.Extensions;
 using Usenet.Util;
 using Usenet.Yenc;

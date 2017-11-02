@@ -1,5 +1,8 @@
 ﻿namespace Usenet.Yenc
 {
+    /// <summary>
+    /// Represents the Yenc footer (=yend) line.
+    /// </summary>
     public class YencFooter
     {
         /// <summary>
@@ -12,10 +15,25 @@
         /// </summary>
         public int PartNumber { get; }
 
+        /// <summary>
+        /// A 32-bit Cyclic Redundancy Check (CRC) value,
+        /// to assist in verifying the integrity of the encoded binary data.
+        /// </summary>
         public uint? Crc32 { get; }
 
+        /// <summary>
+        /// A 32-bit Cyclic Redundancy Check (CRC) value,
+        /// to assist in verifying the integrity of the preceeding encoded part.
+        /// </summary>
         public uint? PartCrc32 { get; }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="YencFooter"/> class.
+        /// </summary>
+        /// <param name="partSize">Size of the part or single-part file.</param>
+        /// <param name="partNumber">Number of the part or 0 in case of a single-part file.</param>
+        /// <param name="crc32">The 32-bit CRC value of the complete file.</param>
+        /// <param name="partCrc32">The 32-bit CRC value of the part.</param>
         public YencFooter(long partSize, int partNumber, uint? crc32, uint? partCrc32)
         {
             PartSize = partSize;

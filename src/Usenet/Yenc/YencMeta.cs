@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Usenet.Exceptions;
 using Usenet.Extensions;
-using Usenet.Util;
 
 namespace Usenet.Yenc
 {
@@ -75,14 +74,14 @@ namespace Usenet.Yenc
         {
             if (line == null)
             {
-                return EmptyDictionary<string, string>.Instance;
+                return new Dictionary<string, string>(0);
             }
 
             // name is always last item on the header line
             string[] nameSplit = line.Split(new[] { $"{YencKeywords.Name}=" }, StringSplitOptions.RemoveEmptyEntries);
             if (nameSplit.Length == 0)
             {
-                return EmptyDictionary<string, string>.Instance;
+                return new Dictionary<string, string>(0);
             }
 
             var dictionary = new Dictionary<string, string>();

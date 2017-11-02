@@ -35,8 +35,8 @@ namespace Usenet.Nzb
         /// <param name="files">A collection of files found in the NZB file.</param>
         public NzbDocument(ILookup<string, string> metaData, IList<NzbFile> files)
         {
-            MetaData = metaData ?? EmptyLookup<string, string>.Instance;
-            Files = files ?? EmptyList<NzbFile>.Instance;
+            MetaData = metaData ?? Enumerable.Empty<string>().ToLookup(x => default(string));
+            Files = files ?? new List<NzbFile>(0);
             Size = Files.Sum(f => f.Size);
         }
 

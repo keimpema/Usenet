@@ -1,5 +1,9 @@
 ﻿namespace Usenet.Yenc
 {
+    /// <summary>
+    /// Represents the combined information of the Yenc header (=ybegin) line 
+    /// and the Yenc part header (=ypart) line if present.
+    /// </summary>
     public class YencHeader
     {
         /// <summary>
@@ -23,7 +27,7 @@
         public int PartNumber { get; }
 
         /// <summary>
-        /// (1.2) In case of multiple parts this contains the total number of parts; otherwise 1.
+        /// In case of multiple parts this contains the total number of parts; otherwise 1.
         /// </summary>
         public int TotalParts { get; }
 
@@ -38,15 +42,15 @@
         public long PartOffset { get; }
 
         /// <summary>
-        /// Ctor.
+        /// Creates a new instance of the <see cref="YencHeader"/> class.
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="fileSize"></param>
-        /// <param name="lineLength"></param>
-        /// <param name="partNumber"></param>
-        /// <param name="totalParts"></param>
-        /// <param name="partSize"></param>
-        /// <param name="partOffset"></param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="fileSize">Size of the file in bytes.</param>
+        /// <param name="lineLength">Length of the encoded lines.</param>
+        /// <param name="partNumber">Number of the part or 0 in case of a single-part file.</param>
+        /// <param name="totalParts">Total number of parts or 1 in case of a single-part file.</param>
+        /// <param name="partSize">Size of the part or entire file.</param>
+        /// <param name="partOffset">Offset of the part or 0 in case of a single-part file.</param>
         public YencHeader(string fileName, long fileSize, int lineLength, int partNumber, int totalParts, long partSize, long partOffset)
         {
             FileName = fileName;

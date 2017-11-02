@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Usenet.Util
 {
+    /// <summary>
+    /// Represents an enumerable stream.
+    /// </summary>
     public class EnumerableStream : AbstractBaseStream
     {
         private readonly IEnumerator<byte[]> enumerator;

@@ -8,7 +8,7 @@ namespace Usenet.Util
     public class ValidationFailure
     {
         /// <summary>
-        /// A code assoiciated with the validation failure.
+        /// A code associated with the validation failure.
         /// </summary>
         public string Code { get; }
 

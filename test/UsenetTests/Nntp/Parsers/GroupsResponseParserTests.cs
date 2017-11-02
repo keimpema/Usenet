@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TestLib;
+using Lib;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Parsers;
 using Usenet.Nntp.Responses;
-using Usenet.Util;
 using Xunit;
 
 namespace UsenetTests.Nntp.Parsers
@@ -23,8 +22,8 @@ namespace UsenetTests.Nntp.Parsers
                 },
                 new XSerializable<NntpGroup[]>(new []
                 {
-                    new NntpGroup("alt.rfc-writers.recovery", 0, 1, 4, NntpPostingStatus.PostingPermitted, string.Empty, EmptyList<int>.Instance),
-                    new NntpGroup("tx.natives.recovery", 0, 56, 89, NntpPostingStatus.PostingPermitted, string.Empty, EmptyList<int>.Instance)
+                    new NntpGroup("alt.rfc-writers.recovery", 0, 1, 4, NntpPostingStatus.PostingPermitted, string.Empty, new List<int>(0)),
+                    new NntpGroup("tx.natives.recovery", 0, 56, 89, NntpPostingStatus.PostingPermitted, string.Empty, new List<int>(0))
                 })
             },
             new object[]
@@ -42,8 +41,8 @@ namespace UsenetTests.Nntp.Parsers
                 },
                 new XSerializable<NntpGroup[]>(new []
                 {
-                    new NntpGroup("misc.test", 1234, 3000234, 3002322, NntpPostingStatus.PostingPermitted, string.Empty, EmptyList<int>.Instance),
-                    new NntpGroup("rec.food.drink.tea", 3, 51, 100, NntpPostingStatus.PostingPermitted, string.Empty, EmptyList<int>.Instance)
+                    new NntpGroup("misc.test", 1234, 3000234, 3002322, NntpPostingStatus.PostingPermitted, string.Empty, new List<int>(0)),
+                    new NntpGroup("rec.food.drink.tea", 3, 51, 100, NntpPostingStatus.PostingPermitted, string.Empty, new List<int>(0))
                 })
             },
             new object[]

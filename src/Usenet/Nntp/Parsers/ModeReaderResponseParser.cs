@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Responses;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Parsers
 {

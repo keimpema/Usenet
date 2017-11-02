@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Usenet.Util
 {
@@ -18,7 +19,7 @@ namespace Usenet.Util
         /// <param name="failures">A collection of <see cref="ValidationFailure"/> objects.</param>
         public ValidationResult(IList<ValidationFailure> failures)
         {
-            Failures = failures ?? EmptyList<ValidationFailure>.Instance;
+            Failures = failures ?? new List<ValidationFailure>(0);
         }
 
         /// <summary>

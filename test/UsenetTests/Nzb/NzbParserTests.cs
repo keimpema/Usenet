@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Xml;
-using TestLib;
-using TestLib.Extensions;
+using Lib;
+using Lib.Extensions;
 using Usenet.Exceptions;
 using Usenet.Nzb;
 using Usenet.Util;

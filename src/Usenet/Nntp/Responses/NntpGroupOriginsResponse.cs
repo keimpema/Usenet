@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Usenet.Nntp.Models;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Responses
 {
@@ -26,7 +25,7 @@ namespace Usenet.Nntp.Responses
         public NntpGroupOriginsResponse(int code, string message, bool success, IEnumerable<NntpGroupOrigin> groupOrigins) 
             : base(code, message, success)
         {
-            GroupOrigins = groupOrigins ?? EmptyList<NntpGroupOrigin>.Instance;
+            GroupOrigins = groupOrigins ?? new NntpGroupOrigin[0];
         }
     }
 }

@@ -1,7 +1,5 @@
-﻿using System; 
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Usenet.Extensions;
-using Usenet.Nntp.Formatters;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Parsers;
 using Usenet.Nntp.Responses;
@@ -322,10 +320,8 @@ namespace Usenet.Nntp
         /// </summary>
         /// <param name="sinceDateTime">List all newsgroups created since this date and time.</param>
         /// <returns>A groups response object.</returns>
-        public NntpGroupsResponse NewGroups(DateTimeOffset sinceDateTime) =>
-            connection.MultiLineCommand(
-                $"NEWGROUPS {DateTimeFormatter.Format(sinceDateTime)}", 
-                new GroupsResponseParser(231, GroupStatusRequestType.Basic));
+        public NntpGroupsResponse NewGroups(NntpDateTime sinceDateTime) =>
+            connection.MultiLineCommand($"NEWGROUPS {sinceDateTime}", new GroupsResponseParser(231, GroupStatusRequestType.Basic));
 
         /// <summary>
         /// The <a href="https://tools.ietf.org/html/rfc3977#section-7.4">NEWNEWS</a> 
@@ -337,8 +333,8 @@ namespace Usenet.Nntp
         /// <param name="sinceDateTime">List all newsgroups that have new articles 
         /// posted or received since this date and time.</param>
         /// <returns>A multi-line response containing a list of message-ids.</returns>
-        public NntpMultiLineResponse NewNews(string wildmat, DateTimeOffset sinceDateTime) =>
-            connection.MultiLineCommand($"NEWNEWS {DateTimeFormatter.Format(sinceDateTime)}", new MultiLineResponseParser(230));
+        public NntpMultiLineResponse NewNews(string wildmat, NntpDateTime sinceDateTime) =>
+            connection.MultiLineCommand($"NEWNEWS {sinceDateTime}", new MultiLineResponseParser(230));
 
 
         /// <summary>

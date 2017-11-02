@@ -97,7 +97,6 @@ namespace Usenet.Nntp.Parsers
             {
                 throw new FormatException(Resources.Nntp.BadHeaderDateFormat);
             }
-            // ReSharper disable once InlineOutVariableDeclaration
             second = 0;
             if (timeParts.Length > 2 && !int.TryParse(timeParts[2], out second))
             {

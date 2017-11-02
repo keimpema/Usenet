@@ -85,7 +85,7 @@ namespace Usenet.Util
         /// <summary>
         /// Represents an empty <see cref="MultiValueDictionary{TKey,TValue}"/>.
         /// </summary>
-        /// <returns>A new empty instance of the <see cref="MultiValueDictionary{TKey,TValue}"/> 
+        /// <returns>A new empty instance on every call of the <see cref="MultiValueDictionary{TKey,TValue}"/> 
         /// that uses a <see cref="HashSet{TValue}"/> factory internally.</returns>
         public static MultiValueDictionary<TKey, TValue> Empty => new MultiValueDictionary<TKey, TValue>();
 

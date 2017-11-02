@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using TestLib;
-using TestLib.Extensions;
+using Lib;
+using Lib.Extensions;
 using Usenet.Util;
 using Usenet.Yenc;
 using Xunit;

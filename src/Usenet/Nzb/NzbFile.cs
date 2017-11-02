@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Usenet.Util;
 
 namespace Usenet.Nzb
 {
@@ -62,8 +61,8 @@ namespace Usenet.Nzb
             Poster = poster;
             Subject = subject;
             Date = date;
-            Groups = groups ?? EmptyList<string>.Instance;
-            Segments = segments ?? EmptyList<NzbSegment>.Instance;
+            Groups = groups ?? new List<string>(0);
+            Segments = segments ?? new List<NzbSegment>(0);
             Size = Segments.Sum(s => s.Size);   
         }
     }

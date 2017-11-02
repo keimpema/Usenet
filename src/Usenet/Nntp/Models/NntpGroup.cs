@@ -71,7 +71,7 @@ namespace Usenet.Nntp.Models
             HighWaterMark = highWaterMark;
             PostingStatus = Enum.IsDefined(typeof(NntpPostingStatus), postingStatus) ? postingStatus : NntpPostingStatus.Unknown;
             OtherGroup = otherGroup ?? string.Empty;
-            ArticleNumbers = articleNumbers ?? EmptyList<int>.Instance;
+            ArticleNumbers = articleNumbers ?? new int[0];
         }
 
         /// <summary>

@@ -6,11 +6,28 @@ using Usenet.Util;
 
 namespace Usenet.Yenc
 {
+    /// <summary>
+    /// Represents a Yenc-encoded article decoder.
+    /// The article is decoded streaming.
+    /// </summary>
     public class YencStreamDecoder
     {
+        /// <summary>
+        /// Decodes Yenc-encoded text into a <see cref="YencStream"/>
+        /// using the default Usenet character encoding.
+        /// </summary>
+        /// <param name="encodedLines">The Yenc encoded lines to decode.</param>
+        /// <returns>A <see cref="YencStream"/> containing a stream of decoded binary data and meta-data.</returns>
         public static YencStream Decode(IEnumerable<string> encodedLines) =>
             Decode(encodedLines, UsenetEncoding.Default);
 
+        /// <summary>
+        /// Decodes Yenc-encoded text into a <see cref="YencStream"/>
+        /// using the specified character encoding.
+        /// </summary>
+        /// <param name="encodedLines">The Yenc encoded lines to decode.</param>
+        /// <param name="encoding">The charcter encoding to use.</param>
+        /// <returns>A <see cref="YencStream"/> containing a stream of decoded binary data and meta-data.</returns>
         public static YencStream Decode(IEnumerable<string> encodedLines, Encoding encoding)
         {
             Guard.ThrowIfNull(encodedLines, nameof(encodedLines));

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Parsers
 {
@@ -33,7 +32,7 @@ namespace Usenet.Nntp.Parsers
         {
             if (!IsSuccessResponse(code) || dataBlock == null)
             {
-                return new NntpGroupsResponse(code, message, false, EmptyList<NntpGroup>.Instance);
+                return new NntpGroupsResponse(code, message, false, new NntpGroup[0]);
             }
 
             return new NntpGroupsResponse(code, message, true, EnumerateGroups(dataBlock));
@@ -83,7 +82,7 @@ namespace Usenet.Nntp.Parsers
                     highWaterMark,
                     postingStatus,
                     otherGroup,
-                    EmptyList<int>.Instance);
+                    new int[0]);
             }
         }
     }

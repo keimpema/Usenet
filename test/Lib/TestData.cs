@@ -2,7 +2,7 @@
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 
-namespace TestLib
+namespace Lib
 {
     public class TestData
     {

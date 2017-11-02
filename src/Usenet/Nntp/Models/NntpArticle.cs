@@ -42,7 +42,7 @@ namespace Usenet.Nntp.Models
             Number = number;
             MessageId = messageId ?? NntpMessageId.Empty;
             Headers = headers ?? MultiValueDictionary<string, string>.Empty;
-            Body = body ?? EmptyList<string>.Instance;            
+            Body = body ?? new string[0];
         }
 
         /// <summary>

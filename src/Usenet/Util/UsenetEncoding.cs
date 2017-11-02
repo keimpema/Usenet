@@ -10,6 +10,6 @@ namespace Usenet.Util
         /// <summary>
         /// Returns iso-8859-1, the default usenet character encoding.
         /// </summary>
-        public static readonly Encoding Default = Encoding.GetEncoding("iso-8859-1");
+        public static Encoding Default { get; } = Encoding.GetEncoding("iso-8859-1");
     }
 }

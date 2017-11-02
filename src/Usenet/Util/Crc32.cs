@@ -18,7 +18,6 @@ namespace Usenet.Util
             Guard.ThrowIfNull(buffer, nameof(buffer));
             
             uint value = seed;
-            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (byte b in buffer)
             {
                 value = (value >> 8) ^ lookupTable[(value & 0xFF) ^ b];

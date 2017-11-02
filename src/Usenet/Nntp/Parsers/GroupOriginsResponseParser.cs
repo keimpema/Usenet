@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Parsers
 {
@@ -20,7 +19,7 @@ namespace Usenet.Nntp.Parsers
         {
             if (!IsSuccessResponse(code) || dataBlock == null)
             {
-                return new NntpGroupOriginsResponse(code, message, false, EmptyList<NntpGroupOrigin>.Instance);
+                return new NntpGroupOriginsResponse(code, message, false, new NntpGroupOrigin[0]);
             }
             
             return new NntpGroupOriginsResponse(code, message, true, EnumerateGroupOrigins(dataBlock));

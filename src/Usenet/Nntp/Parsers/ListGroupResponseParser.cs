@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Parsers
 {
@@ -22,7 +21,7 @@ namespace Usenet.Nntp.Parsers
                 return new NntpGroupResponse(
                     code, message, false,
                     new NntpGroup(string.Empty, 0, 0, 0, NntpPostingStatus.Unknown,
-                        string.Empty, EmptyList<int>.Instance));
+                        string.Empty, new int[0]));
             }
 
             string[] responseSplit = message.Split(' ');

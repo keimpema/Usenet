@@ -3,8 +3,16 @@ using Usenet.Util;
 
 namespace Usenet.Yenc
 {
+    /// <summary>
+    /// Represents a Yenc-encoded article validator.
+    /// </summary>
     public class YencValidator
     {
+        /// <summary>
+        /// Validates the specified <see cref="YencArticle"/>.
+        /// </summary>
+        /// <param name="article">The Yenc-encoded article to validate.</param>
+        /// <returns>A <see cref="ValidationResult"/> containing a list of 0 or more validation failures.</returns>
         public static ValidationResult Validate(YencArticle article)
         {
             var failures = new List<ValidationFailure>();

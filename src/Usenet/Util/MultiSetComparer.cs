@@ -6,18 +6,38 @@ namespace Usenet.Util
     /// <inheritdoc />
     /// <summary>
     /// MultiSetComparer
-    /// Source: https://stackoverflow.com/questions/50098/comparing-two-collections-for-equality-irrespective-of-the-order-of-items-in-the
+    /// (<a href="https://stackoverflow.com/questions/50098/comparing-two-collections-for-equality-irrespective-of-the-order-of-items-in-the">Source</a>)
     /// </summary>
     /// <typeparam name="T"></typeparam>
     internal class MultiSetComparer<T> : IEqualityComparer<IEnumerable<T>>
     {
         private readonly IEqualityComparer<T> comparer;
 
-        public MultiSetComparer(IEqualityComparer<T> comparer = null)
+        /// <summary>
+        /// Creates a new instance of the <see cref="MultiSetComparer{T}"/> class
+        /// using the specified <see cref="IEqualityComparer{T}"/>.
+        /// </summary>
+        /// <param name="comparer">The equality comparer to use.</param>
+        public MultiSetComparer(IEqualityComparer<T> comparer)
         {
             this.comparer = comparer ?? EqualityComparer<T>.Default;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="MultiSetComparer{T}"/> class
+        /// using the default <see cref="IEqualityComparer{T}"/> for the type specified by the generic argument.
+        /// </summary>
+        public MultiSetComparer() : this(EqualityComparer<T>.Default)
+        {            
+        }
+
+        /// <summary>
+        /// Determines whether the first collection is equal to the second collection irrespective
+        /// of the order of items in the collections.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
         public bool Equals(IEnumerable<T> first, IEnumerable<T> second)
         {
             if (first == null)
@@ -90,6 +110,10 @@ namespace Usenet.Util
             return dictionary;
         }
 
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer hash code.</returns>
         public int GetHashCode(IEnumerable<T> enumerable)
         {
             Guard.ThrowIfNull(enumerable, nameof(enumerable));
@@ -98,6 +122,10 @@ namespace Usenet.Util
                 .Aggregate(17, (current, val) => current * 23 + (val?.GetHashCode() ?? 42));
         }
 
-        public static MultiSetComparer<T> Instance => new MultiSetComparer<T>();
+        /// <summary>
+        /// A singleton instance of the <see cref="MultiSetComparer{T}"/> class that
+        /// uses the default <see cref="IEqualityComparer{T}"/> for the type specified by the generic argument.
+        /// </summary>
+        public static MultiSetComparer<T> Instance { get; } = new MultiSetComparer<T>();
     }
 }

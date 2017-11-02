@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
 
-namespace TestLib.Extensions
+namespace Lib.Extensions
 {
     public static class FileInfoExtensions
     {

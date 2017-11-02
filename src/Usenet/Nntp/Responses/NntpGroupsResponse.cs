@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Usenet.Nntp.Models;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Responses
 {
@@ -19,7 +18,7 @@ namespace Usenet.Nntp.Responses
         public NntpGroupsResponse(int code, string message, bool success, IEnumerable<NntpGroup> groups) 
             : base(code, message, success)
         {
-            Groups = groups ?? EmptyList<NntpGroup>.Instance;
+            Groups = groups ?? new NntpGroup[0];
         }
     }
 }

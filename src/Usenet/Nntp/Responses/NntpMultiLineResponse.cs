@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Usenet.Util;
 
 namespace Usenet.Nntp.Responses
 {
@@ -26,7 +25,7 @@ namespace Usenet.Nntp.Responses
             bool success,
             IEnumerable<string> lines) : base(code, message, success)
         {
-            Lines = lines ?? EmptyList<string>.Instance;
+            Lines = lines ?? new string[0];
         }
     }
 }

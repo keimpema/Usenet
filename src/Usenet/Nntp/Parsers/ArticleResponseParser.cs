@@ -81,7 +81,7 @@ namespace Usenet.Nntp.Parsers
                 // get body if requested
                 IEnumerable<string> bodyLines = (requestType & ArticleRequestType.Body) == ArticleRequestType.Body
                     ? EnumerateBodyLines(enumerator)
-                    : EmptyList<string>.Instance;
+                    : new string[0];
 
                 return new NntpArticleResponse(
                     code, message, true,

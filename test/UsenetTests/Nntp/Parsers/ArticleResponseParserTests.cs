@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TestLib;
+using Lib;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Parsers;
 using Usenet.Nntp.Responses;
@@ -18,7 +18,7 @@ namespace UsenetTests.Nntp.Parsers
                 220, "123 <123@poster.com>", (int) ArticleRequestType.Article,
                 new string[0],
                 new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null,
-                    EmptyList<string>.Instance))
+                    new List<string>(0)))
             },
             new object[]
             {
@@ -71,7 +71,7 @@ namespace UsenetTests.Nntp.Parsers
                     {
                         {"Multi", "line1 line2 line3"},
                         {"Path", "pathost!demo!whitehouse!not-for-mail"},
-                    }, EmptyList<string>.Instance))
+                    }, new List<string>(0)))
             },
             new object[]
             {
@@ -85,7 +85,7 @@ namespace UsenetTests.Nntp.Parsers
                     new MultiValueDictionary<string, string>(() => new List<string>())
                     {
                         {"Path", "pathost!demo!whitehouse!not-for-mail"},
-                    }, EmptyList<string>.Instance))
+                    }, new List<string>(0)))
             },
         };
 
