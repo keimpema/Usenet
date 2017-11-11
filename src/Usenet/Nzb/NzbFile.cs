@@ -22,6 +22,11 @@ namespace Usenet.Nzb
         public string Subject { get; }
 
         /// <summary>
+        /// The file name extracted from the subject.
+        /// </summary>
+        public string FileName { get; }
+
+        /// <summary>
         /// The date the server saw this article.
         /// </summary>
         public DateTimeOffset Date { get; }
@@ -46,20 +51,23 @@ namespace Usenet.Nzb
         /// </summary>
         /// <param name="poster">The name of the poster. This is a copy of the article's From header field.</param>
         /// <param name="subject">A slightly munged copy of the article's subject. The segment counter (xx/yy) 
-        /// usually found at the end, is replaced with (1/yy). You can use the yy to 
-        /// confirm all segments are present.</param>
+        ///     usually found at the end, is replaced with (1/yy). You can use the yy to 
+        ///     confirm all segments are present.</param>
+        /// <param name="fileName">The file name extracted from the subject.</param>
         /// <param name="date">The date the server saw this article.</param>
         /// <param name="groups">The list of groups that reference this file.</param>
         /// <param name="segments">The list of segments that make up this file.</param>
         public NzbFile(
             string poster, 
             string subject, 
+            string fileName,
             DateTimeOffset date, 
             IList<string> groups,
             IList<NzbSegment> segments)
         {
             Poster = poster;
             Subject = subject;
+            FileName = fileName;
             Date = date;
             Groups = groups ?? new List<string>(0);
             Segments = segments ?? new List<NzbSegment>(0);

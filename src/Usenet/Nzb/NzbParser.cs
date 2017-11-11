@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Usenet.Exceptions;
 using Usenet.Util;
@@ -13,6 +14,8 @@ namespace Usenet.Nzb
     /// </summary>
     public class NzbParser
     {
+        private static readonly Regex fileNameRegex = new Regex("\"([^\"]*)\"");
+
         /// <summary>
         /// Represents the NZB namespace.
         /// </summary>
@@ -90,10 +93,29 @@ namespace Usenet.Nzb
             }
             DateTimeOffset date = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
             string subject = (string) fileElement.Attribute(NzbKeywords.Subject) ?? string.Empty;
+            string fileName = GetFileName(subject);
             List<string> groups = GetGroups(context, fileElement.Element(context.Namespace + NzbKeywords.Groups));
             List<NzbSegment> segments = GetSegments(context, fileElement.Element(context.Namespace + NzbKeywords.Segments));
 
-            return new NzbFile(poster, subject, date, groups, segments);
+            return new NzbFile(poster, subject, fileName, date, groups, segments);
+        }
+
+        private static string GetFileName(string subject)
+        {
+            var match = fileNameRegex.Match(subject);
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+            int len = subject.LastIndexOf(" (", StringComparison.OrdinalIgnoreCase);
+            return RemoveTrailingYenc(len < 0 ? subject : subject.Substring(0, len));
+        }
+
+        private static string RemoveTrailingYenc(string subject)
+        {
+            subject = subject.Trim();
+            int yencPos = subject.LastIndexOf(" yenc", StringComparison.OrdinalIgnoreCase);
+            return yencPos < 0 ? subject : subject.Substring(0, yencPos).Trim();
         }
 
         private static List<string> GetGroups(NzbParserContext context, XContainer groupsElement)

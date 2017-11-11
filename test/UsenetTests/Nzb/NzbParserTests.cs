@@ -173,5 +173,42 @@ namespace UsenetTests.Nzb
             const string nzbText = @"<html></html>";
             Assert.Throws<InvalidNzbDataException>(() => NzbParser.Parse(nzbText));
         }
+
+        [Fact]
+        public void FileShouldBeExtractedFromSubjectWhenQuoted()
+        {
+            const string nzbText = @"
+<nzb xmlns=""http://www.newzbin.com/DTD/2003/nzb"">
+  <file subject=""(TWD151 - 153)[2 / 9] - &quot;TWD151 - 153.rar&quot; yEnc (001 / 249)""></file>
+</nzb>";
+
+            NzbDocument actualDocument = NzbParser.Parse(nzbText);
+            Assert.Equal("TWD151 - 153.rar", actualDocument.Files.Single().FileName);
+        }
+
+        [Fact]
+        public void FileShouldBeExtractedFromSubjectWhenNotQuoted()
+        {
+            const string nzbText = @"
+<nzb xmlns=""http://www.newzbin.com/DTD/2003/nzb"">
+  <file subject=""(TWD151 - 153)[2 / 9] - TWD151 - 153.rar yEnc (001 / 249)""></file>
+</nzb>";
+
+            NzbDocument actualDocument = NzbParser.Parse(nzbText);
+            Assert.Equal("(TWD151 - 153)[2 / 9] - TWD151 - 153.rar", actualDocument.Files.Single().FileName);
+        }
+
+        [Fact]
+        public void FileShouldBeExtractedFromSubjectWhenNotQuotedAndNoParenthesis()
+        {
+            const string nzbText = @"
+<nzb xmlns=""http://www.newzbin.com/DTD/2003/nzb"">
+  <file subject=""[2 / 9] - TWD151 - 153.rar yEnc""></file>
+</nzb>";
+
+            NzbDocument actualDocument = NzbParser.Parse(nzbText);
+            Assert.Equal("[2 / 9] - TWD151 - 153.rar", actualDocument.Files.Single().FileName);
+        }
+
     }
 }
