@@ -1,7 +1,7 @@
 ﻿namespace Usenet.Yenc
 {
     /// <summary>
-    /// Represents the Yenc footer (=yend) line.
+    /// Represents the yEnc footer (=yend) line.
     /// </summary>
     public class YencFooter
     {

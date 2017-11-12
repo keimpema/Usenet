@@ -1,8 +1,8 @@
 ﻿namespace Usenet.Yenc
 {
     /// <summary>
-    /// Represents the combined information of the Yenc header (=ybegin) line 
-    /// and the Yenc part header (=ypart) line if present.
+    /// Represents the combined information of the yEnc header (=ybegin) line 
+    /// and the yEnc part header (=ypart) line if present.
     /// </summary>
     public class YencHeader
     {

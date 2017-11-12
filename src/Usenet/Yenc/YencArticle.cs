@@ -3,7 +3,7 @@
 namespace Usenet.Yenc
 {
     /// <summary>
-    /// Represents a decoded Yenc-decoded article.
+    /// Represents a decoded yEnc-encoded article.
     /// </summary>
     public class YencArticle
     {
@@ -19,16 +19,16 @@ namespace Usenet.Yenc
         public YencFooter Footer { get; }
 
         /// <summary>
-        /// The binary data obtained by decoding the Yenc-decoded article.
+        /// The binary data obtained by decoding the yEnc-encoded article.
         /// </summary>
         public byte[] Data { get; set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="YencArticle"/> class.
         /// </summary>
-        /// <param name="header">The header of the Yenc-encoded article.</param>
-        /// <param name="footer">The optional footer of the Yenc-encoded article.</param>
-        /// <param name="data">The binary data obtained by decoding the Yenc-decoded article.</param>
+        /// <param name="header">The header of the yEnc-encoded article.</param>
+        /// <param name="footer">The optional footer of the yEnc-encoded article.</param>
+        /// <param name="data">The binary data obtained by decoding the yEnc-encoded article.</param>
         public YencArticle(YencHeader header, YencFooter footer, byte[] data)
         {
             Header = header.ThrowIfNull(nameof(header));

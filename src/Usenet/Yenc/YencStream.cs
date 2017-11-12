@@ -4,7 +4,7 @@ using Usenet.Util;
 namespace Usenet.Yenc
 {
     /// <summary>
-    /// Represents a decoded Yenc-encoded article as a stream.
+    /// Represents a decoded yEnc-encoded article as a stream.
     /// </summary>
     public class YencStream : EnumerableStream
     {
@@ -17,8 +17,8 @@ namespace Usenet.Yenc
         /// <summary>
         /// Creates a new instance of the <see cref="YencStream"/> class.
         /// </summary>
-        /// <param name="header">The header of the Yenc-encoded article.</param>
-        /// <param name="input">An enumeration of byte chunks from the decoded Yenc-encoded article.</param>
+        /// <param name="header">The header of the yEnc-encoded article.</param>
+        /// <param name="input">An enumeration of byte chunks from the decoded yEnc-encoded article.</param>
         public YencStream(YencHeader header, IEnumerable<byte[]> input) : base(input)
         {
             Guard.ThrowIfNull(header, nameof(header));
