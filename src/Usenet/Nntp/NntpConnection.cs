@@ -25,6 +25,7 @@ namespace Usenet.Nntp
         private StreamWriter writer;
         private NntpStreamReader reader;
 
+        /// <inheritdoc/>
         public async Task<TResponse> ConnectAsync<TResponse>(string hostname, int port, bool useSsl, IResponseParser<TResponse> parser)
         {
             log.LogInformation("Connecting: {hostname} {port} (Use SSl = {useSsl})", hostname, port, useSsl);
@@ -35,6 +36,7 @@ namespace Usenet.Nntp
             return GetResponse(parser);
         }
 
+        /// <inheritdoc/>
         public TResponse Command<TResponse>(string command, IResponseParser<TResponse> parser)
         {
             ThrowIfNotConnected();
@@ -44,6 +46,7 @@ namespace Usenet.Nntp
             return GetResponse(parser);
         }
 
+        /// <inheritdoc/>
         public TResponse MultiLineCommand<TResponse>(string command, IMultiLineResponseParser<TResponse> parser) //, bool decompress = false)
         {
             NntpResponse response = Command(command, new ResponseParser());
@@ -55,6 +58,7 @@ namespace Usenet.Nntp
             return parser.Parse(response.Code, response.Message, dataBlock);
         }
 
+        /// <inheritdoc/>
         public TResponse GetResponse<TResponse>(IResponseParser<TResponse> parser)
         {
             string responseText = reader.ReadLine();
@@ -71,6 +75,7 @@ namespace Usenet.Nntp
             return parser.Parse(code, responseText.Substring(3).Trim());
         }
 
+        /// <inheritdoc/>
         public void WriteLine(string line)
         {
             ThrowIfNotConnected();
@@ -106,6 +111,7 @@ namespace Usenet.Nntp
             }
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             client?.Dispose();

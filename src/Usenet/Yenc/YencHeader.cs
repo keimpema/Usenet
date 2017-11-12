@@ -62,6 +62,9 @@
             PartOffset = partOffset;
         }
 
+        /// <summary>
+        /// In case of multiple parts this returns true; otherwise false.
+        /// </summary>
         public bool IsFilePart => PartNumber > 0;
     }
 }

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace Usenet.Util
 {
     /// <summary>
-    /// Represents an enumerable stream.
+    /// Represents an enumerable stream. Can be used to stream an enumerable collection of
+    /// byte buffers.
     /// </summary>
     public class EnumerableStream : AbstractBaseStream
     {
@@ -12,12 +13,17 @@ namespace Usenet.Util
         private byte[] currentChunk;
         private int currentOffset;
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="EnumerableStream"/> class.
+        /// </summary>
+        /// <param name="input">An enumerable collection of byte buffers.</param>
         public EnumerableStream(IEnumerable<byte[]> input)
         {
             Guard.ThrowIfNull(input, nameof(input));
             enumerator = input.GetEnumerator();
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             try
@@ -33,6 +39,7 @@ namespace Usenet.Util
             }
         }
 
+        /// <inheritdoc/>
         public override int Read(byte[] buffer, int offset, int count)
         {
             Guard.ThrowIfNull(buffer, nameof(buffer));
@@ -68,6 +75,7 @@ namespace Usenet.Util
             return total;
         }
 
+        /// <inheritdoc/>
         public override bool CanRead => true;
     }
 }

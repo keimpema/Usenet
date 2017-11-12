@@ -13,8 +13,18 @@ namespace Usenet.Nntp.Responses
     /// </summary>
     public class NntpGroupsResponse : NntpResponse
     {
+        /// <summary>
+        /// The list of <see cref="NntpGroup"/> objects received from the server.
+        /// </summary>
         public IEnumerable<NntpGroup> Groups { get; }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="NntpGroupResponse"/> class.
+        /// </summary>
+        /// <param name="code">The response code received from the server.</param>
+        /// <param name="message">The response message received from the server.</param>
+        /// <param name="success">A value indicating whether the command succeeded or failed.</param>
+        /// <param name="groups">The list of <see cref="NntpGroup"/> objects received from the server.</param>
         public NntpGroupsResponse(int code, string message, bool success, IEnumerable<NntpGroup> groups) 
             : base(code, message, success)
         {

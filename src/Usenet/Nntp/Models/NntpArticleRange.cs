@@ -102,6 +102,11 @@ namespace Usenet.Nntp.Models
             return (object)other != null && From == other.From && To == other.To;
         }
 
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpArticleRange"/> value.
+        /// </summary>
+        /// <param name="obj">An <see cref="object"/> to compare to this instance.</param>
+        /// <returns>true if <paramref name="obj" /> has the same value as this instance; otherwise, false.</returns>
         public override bool Equals(object obj) => Equals(obj as NntpArticleRange);
 
         /// <summary>

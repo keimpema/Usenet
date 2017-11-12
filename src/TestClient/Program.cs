@@ -55,9 +55,6 @@ namespace TestClient
             Nntp nntpOptions = serviceProvider.GetService<IOptions<Nntp>>().Value;
             Server server;
 
-            bool streaming = args.Length > 0 && args[0] == "stream";
-            log.LogInformation("Decode streaming: {streaming}", streaming);
-
             while ((server = ChooseServer(nntpOptions.Servers)) != null)
             {
                 try
