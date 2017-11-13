@@ -4,16 +4,17 @@
     <TargetFramework>netstandard1.3</TargetFramework>
     <Authors>Harmen van Keimpema</Authors>
     <Company />
-    <Description>A library for working with Usenet. It offers an NNTP client, an NZB file parser, and a yEnc decoder.</Description>
+    <Description>A library for working with Usenet. It offers an NNTP client, an NZB file parser, and a yEnc decoder. It is mainly focused on keeping memory usage low. Server responses can be enumerated as they come in. yEnc-encoded messages will be decoded streaming.</Description>
     <PackageProjectUrl>https://github.com/keimpema/Usenet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/keimpema/Usenet</RepositoryUrl>
     <RepositoryType />
-    <PackageTags>usenet;nntp;nzb;yenc</PackageTags>
+    <PackageTags>usenet;nntp;nzb;yenc;stream;streaming</PackageTags>
     <PackageId>Usenet</PackageId>
     <Version>1.0.1</Version>
     <Product>Usenet</Product>
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <FileVersion>1.0.1.0</FileVersion>
+    <InformationalVersion>1.0.1.0</InformationalVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
