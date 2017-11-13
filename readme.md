@@ -9,10 +9,16 @@ and a [yEnc](https://en.wikipedia.org/wiki/YEnc) decoder.
 It is mainly focused on keeping memory usage low. Server responses can be enumerated as they come in. 
 yEnc-encoded messages will be decoded streaming.
 
+The NNTP client is compliant with
+[RFC 2980](https://tools.ietf.org/html/rfc2980),
+[RFC 3977](https://tools.ietf.org/html/rfc3977),
+[RFC 4643](https://tools.ietf.org/html/rfc4643) and
+[RFC 6048](https://tools.ietf.org/html/rfc6048).
+
 [![keimpema MyGet Build Status](https://www.myget.org/BuildSource/Badge/keimpema?identifier=5a545640-4681-43a6-8c40-3f7bec5f2006)](https://www.myget.org/)
 
 ## Getting Started ##
-Install Nuget package:
+Install [Nuget](https://www.nuget.org/packages/Usenet) package:
 ```
 PM> Install-Package Usenet
 ```
@@ -50,7 +56,6 @@ NntpArticle newArticle = new NntpArticleBuilder()
     .AddLine("with multiple lines")
     .Build();
 
-// post
 client.Post(newArticle);
 ```
 Parse an Nzb file, download, decode and write the parts streaming to a file:
@@ -59,7 +64,7 @@ NzbDocument nzbDocument = NzbParser.Parse(File.ReadAllText(nzbPath));
 
 foreach (NzbSegment segment in file.Segments)
 {
-    // retrieve article form Usenet server
+    // retrieve article from Usenet server
     NntpArticleResponse response = client.Article(segment.MessageId);
 
     // decode the yEnc-encoded article
