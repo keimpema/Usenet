@@ -1,19 +1,10 @@
 # Usenet
 
-A library for working with [Usenet](https://en.wikipedia.org/wiki/Usenet). 
-It offers 
-an [NNTP](https://en.wikipedia.org/wiki/Network_News_Transfer_Protocol) client, 
-an [NZB](https://en.wikipedia.org/wiki/NZB) file parser, 
-and a [yEnc](https://en.wikipedia.org/wiki/YEnc) decoder.
+A library for working with [Usenet](https://en.wikipedia.org/wiki/Usenet). It offers an [NNTP](https://en.wikipedia.org/wiki/Network_News_Transfer_Protocol) client, an [NZB](https://en.wikipedia.org/wiki/NZB) file parser, and a [yEnc](https://en.wikipedia.org/wiki/YEnc) decoder.
 
-It is mainly focused on keeping memory usage low. Server responses can be enumerated as they come in. 
-yEnc-encoded messages will be decoded streaming.
+It is mainly focused on keeping memory usage low. Server responses can be enumerated as they come in. yEnc-encoded messages will be decoded streaming.
 
-The NNTP client is compliant with
-[RFC 2980](https://tools.ietf.org/html/rfc2980),
-[RFC 3977](https://tools.ietf.org/html/rfc3977),
-[RFC 4643](https://tools.ietf.org/html/rfc4643) and
-[RFC 6048](https://tools.ietf.org/html/rfc6048).
+The NNTP client is compliant with [RFC 2980](https://tools.ietf.org/html/rfc2980), [RFC 3977](https://tools.ietf.org/html/rfc3977), [RFC 4643](https://tools.ietf.org/html/rfc4643) and [RFC 6048](https://tools.ietf.org/html/rfc6048).
 
 [![keimpema MyGet Build Status](https://www.myget.org/BuildSource/Badge/keimpema?identifier=5a545640-4681-43a6-8c40-3f7bec5f2006)](https://www.myget.org/)
 
