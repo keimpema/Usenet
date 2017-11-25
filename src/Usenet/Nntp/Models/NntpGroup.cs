@@ -17,17 +17,17 @@ namespace Usenet.Nntp.Models
         /// <summary>
         /// The estimated number of articles in the <see cref="NntpGroup"/>.
         /// </summary>
-        public int ArticleCount { get; }
+        public long ArticleCount { get; }
 
         /// <summary>
         /// Reported low water mark.
         /// </summary>
-        public int LowWaterMark { get; }
+        public long LowWaterMark { get; }
 
         /// <summary>
         /// Reported high water mark.
         /// </summary>
-        public int HighWaterMark { get; }
+        public long HighWaterMark { get; }
 
         /// <summary>
         /// The current <see cref="NntpPostingStatus"/> of the <see cref="NntpGroup"/> on the server.
@@ -43,7 +43,7 @@ namespace Usenet.Nntp.Models
         /// <summary>
         /// A list of <see cref="NntpArticle"/> numbers in the <see cref="NntpGroup"/>.
         /// </summary>
-        public IEnumerable<int> ArticleNumbers { get; }
+        public IEnumerable<long> ArticleNumbers { get; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="NntpGroup"/> class.
@@ -58,12 +58,12 @@ namespace Usenet.Nntp.Models
         /// <param name="articleNumbers">A list of <see cref="NntpArticle"/> numbers in the <see cref="NntpGroup"/>.</param>
         public NntpGroup(
             string name, 
-            int articleCount, 
-            int lowWaterMark,
-            int highWaterMark,
+            long articleCount, 
+            long lowWaterMark,
+            long highWaterMark,
             NntpPostingStatus postingStatus,
             string otherGroup,
-            IEnumerable<int> articleNumbers)
+            IEnumerable<long> articleNumbers)
         {
             Name = name ?? string.Empty;
             ArticleCount = articleCount;
@@ -71,7 +71,7 @@ namespace Usenet.Nntp.Models
             HighWaterMark = highWaterMark;
             PostingStatus = Enum.IsDefined(typeof(NntpPostingStatus), postingStatus) ? postingStatus : NntpPostingStatus.Unknown;
             OtherGroup = otherGroup ?? string.Empty;
-            ArticleNumbers = articleNumbers ?? new int[0];
+            ArticleNumbers = articleNumbers ?? new long[0];
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Usenet.Nntp.Models
                 HighWaterMark.Equals(other.HighWaterMark) &&
                 PostingStatus.Equals(other.PostingStatus) && 
                 OtherGroup.Equals(other.OtherGroup) &&
-                MultiSetComparer<int>.Instance.Equals(ArticleNumbers, other.ArticleNumbers);
+                MultiSetComparer<long>.Instance.Equals(ArticleNumbers, other.ArticleNumbers);
         }
 
         /// <summary>

@@ -87,3 +87,13 @@ Close connection:
 client.Quit();
 ```
 
+## Release Notes ##
+### Release 1.1.0 ###
+- Changed article number type from int to long.
+### Release 1.0.1 ###
+- Changed Yenc to yEnc.
+- The NZB parser now attempts to extract the file name from the subject.
+### Release 1.0.0 ###
+- NNTP client
+- NZB parser
+- yEnc decoder

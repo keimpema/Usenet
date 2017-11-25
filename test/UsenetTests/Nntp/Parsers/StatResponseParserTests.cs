@@ -16,8 +16,8 @@ namespace UsenetTests.Nntp.Parsers
         public void ResponseShouldBeParsedCorrectly(
             int responseCode, 
             string responseMessage, 
-            NntpStatResponseType expectedResponseType, 
-            int expectedArticleNumber, 
+            NntpStatResponseType expectedResponseType,
+            long expectedArticleNumber, 
             string expectedMessageId)
         {
             NntpStatResponse statResponse = new StatResponseParser().Parse(responseCode, responseMessage);

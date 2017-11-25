@@ -14,12 +14,12 @@ namespace UsenetTests.Nntp.Parsers
             new object[] 
             {
                 211, "1234 3000234 3002322 misc.test",
-                new XSerializable<NntpGroup>(new NntpGroup("misc.test", 1234, 3000234, 3002322, NntpPostingStatus.Unknown, string.Empty, new List<int>(0)))
+                new XSerializable<NntpGroup>(new NntpGroup("misc.test", 1234, 3000234, 3002322, NntpPostingStatus.Unknown, string.Empty, new List<long>(0)))
             } ,
             new object[] 
             {
                 411, "example.is.sob.bradner.or.barber is unknown",
-                new XSerializable<NntpGroup>(new NntpGroup("", 0, 0, 0, NntpPostingStatus.Unknown, string.Empty, new List<int>(0)))  
+                new XSerializable<NntpGroup>(new NntpGroup("", 0, 0, 0, NntpPostingStatus.Unknown, string.Empty, new List<long>(0)))  
             }
         };
 

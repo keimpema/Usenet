@@ -13,7 +13,7 @@ namespace Usenet.Nntp.Models
         /// <summary>
         /// The number of the <see cref="NntpArticle"/> in the currently selected newsgroup.
         /// </summary>
-        public int Number { get; }
+        public long Number { get; }
 
         /// <summary>
         /// The message-id of the <see cref="NntpArticle"/>.
@@ -37,7 +37,7 @@ namespace Usenet.Nntp.Models
         /// <param name="messageId">The <see cref="NntpMessageId"/> of the <see cref="NntpArticle"/>.</param>
         /// <param name="headers">The headers of the <see cref="NntpArticle"/>.</param>
         /// <param name="body">The body of the <see cref="NntpArticle"/>.</param>
-        public NntpArticle(int number, NntpMessageId messageId, MultiValueDictionary<string, string> headers, IEnumerable<string> body)
+        public NntpArticle(long number, NntpMessageId messageId, MultiValueDictionary<string, string> headers, IEnumerable<string> body)
         {
             Number = number;
             MessageId = messageId ?? NntpMessageId.Empty;

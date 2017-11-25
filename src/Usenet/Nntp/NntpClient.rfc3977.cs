@@ -107,9 +107,6 @@ namespace Usenet.Nntp
         /// <returns>A last response object.</returns>
         public NntpLastResponse Last() => connection.Command("LAST", new LastResponseParser());
 
-        //public NntpLastResponse Last() =>
-        //    LastResponseParser.Parse(connection.Command("LAST", (int)NntpLastResponseType.ArticleExists));
-
         /// <summary>
         /// The <a href="https://tools.ietf.org/html/rfc3977#section-6.1.4">NEXT</a> command.
         /// If the currently selected newsgroup is valid, the current article
@@ -141,7 +138,7 @@ namespace Usenet.Nntp
         /// </summary>
         /// <param name="number">The number of the article to receive from the server.</param>
         /// <returns>An article response object.</returns>
-        public NntpArticleResponse Article(int number) =>
+        public NntpArticleResponse Article(long number) =>
             connection.MultiLineCommand($"ARTICLE {number}", new ArticleResponseParser(ArticleRequestType.Article));
 
         /// <summary>
@@ -177,7 +174,7 @@ namespace Usenet.Nntp
         /// </summary>
         /// <param name="number">The number of the article to receive from the server.</param>
         /// <returns>An article response object.</returns>
-        public NntpArticleResponse Head(int number) =>
+        public NntpArticleResponse Head(long number) =>
             connection.MultiLineCommand($"HEAD {number}", new ArticleResponseParser(ArticleRequestType.Head));
 
         /// <summary>
@@ -215,7 +212,7 @@ namespace Usenet.Nntp
         /// </summary>
         /// <param name="number">The number of the article to receive from the server.</param>
         /// <returns>An article response object.</returns>
-        public NntpArticleResponse Body(int number) =>
+        public NntpArticleResponse Body(long number) =>
             connection.MultiLineCommand($"BODY {number}", new ArticleResponseParser(ArticleRequestType.Body));
 
         /// <summary>
@@ -251,7 +248,7 @@ namespace Usenet.Nntp
         /// </summary>
         /// <param name="number">The number of the article to receive from the server.</param>
         /// <returns>A stat response object.</returns>
-        public NntpStatResponse Stat(int number) => connection.Command($"STAT {number}", new StatResponseParser());
+        public NntpStatResponse Stat(long number) => connection.Command($"STAT {number}", new StatResponseParser());
 
         /// <summary>
         /// The <a href="https://tools.ietf.org/html/rfc3977#section-6.2.4">STAT</a> 

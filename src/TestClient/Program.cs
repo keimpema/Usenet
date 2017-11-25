@@ -249,7 +249,7 @@ namespace TestClient
             }
         }
 
-        private static void TestArticle(NntpClient client, NntpGroup @group)
+        private static void TestArticle(NntpClient client, NntpGroup group)
         {
             // get article by message id
             ShowArticle(client.Article("<53637872-51a5-434f-87ac-30425ca9cb2b@googlegroups.com>").Article);
@@ -261,19 +261,19 @@ namespace TestClient
             ShowArticle(client.Article().Article);
 
             // get last article in group
-            ShowArticle(client.Article(@group.HighWaterMark).Article);
+            ShowArticle(client.Article(group.HighWaterMark).Article);
         }
 
-        private static void TestDecompression(NntpClient client, NntpGroup @group)
+        private static void TestDecompression(NntpClient client, NntpGroup group)
         {
             // enable gzip
             client.XfeatureCompressGzip(false);
 
             // xzhdr
-            ShowLines(client.Xzhdr("Subject", @group.LowWaterMark, @group.HighWaterMark).Lines);
+            ShowLines(client.Xzhdr("Subject", NntpArticleRange.Range(group.LowWaterMark, group.HighWaterMark)).Lines);
 
             // xzver
-            ShowLines(client.Xzver(@group.HighWaterMark, @group.HighWaterMark).Lines);
+            ShowLines(client.Xzver(NntpArticleRange.SingleArticle(group.HighWaterMark)).Lines);
 
             //TestListDistributions(client);
             TestListActive(client);
@@ -462,7 +462,7 @@ namespace TestClient
             Console.WriteLine($"Low water mark: {group.LowWaterMark}");
             Console.WriteLine($"High water mark: {group.HighWaterMark}");
             Console.WriteLine($"Posting status: {group.PostingStatus}");
-            foreach (int articleNumber in group.ArticleNumbers)
+            foreach (long articleNumber in group.ArticleNumbers)
             {
                 Console.Write(articleNumber);
                 Console.Write(" ");

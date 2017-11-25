@@ -21,7 +21,7 @@ namespace Usenet.Nntp.Parsers
                 return new NntpGroupResponse(
                     code, message, false,
                     new NntpGroup(string.Empty, 0, 0, 0, NntpPostingStatus.Unknown,
-                        string.Empty, new int[0]));
+                        string.Empty, new long[0]));
             }
 
             string[] responseSplit = message.Split(' ');
@@ -30,9 +30,9 @@ namespace Usenet.Nntp.Parsers
                 log.LogWarning("Invalid response message: {Message} Expected: {{count}} {{low}} {{high}} {{group}}", message);
             }
 
-            int.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out int articleCount);
-            int.TryParse(responseSplit.Length > 1 ? responseSplit[1] : null, out int lowWaterMark);
-            int.TryParse(responseSplit.Length > 2 ? responseSplit[2] : null, out int highWaterMark);
+            long.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out long articleCount);
+            long.TryParse(responseSplit.Length > 1 ? responseSplit[1] : null, out long lowWaterMark);
+            long.TryParse(responseSplit.Length > 2 ? responseSplit[2] : null, out long highWaterMark);
             string name = responseSplit.Length > 3 ? responseSplit[3] : string.Empty;
 
             return new NntpGroupResponse(
@@ -41,7 +41,7 @@ namespace Usenet.Nntp.Parsers
                     EnumerateArticleNumbers(dataBlock)));
         }
 
-        private static IEnumerable<int> EnumerateArticleNumbers(IEnumerable<string> dataBlock)
+        private static IEnumerable<long> EnumerateArticleNumbers(IEnumerable<string> dataBlock)
         {
             if (dataBlock == null)
             {
@@ -49,7 +49,7 @@ namespace Usenet.Nntp.Parsers
             }
             foreach (string line in dataBlock)
             {
-                if (!int.TryParse(line, out int number))
+                if (!long.TryParse(line, out long number))
                 {
                     continue;
                 }

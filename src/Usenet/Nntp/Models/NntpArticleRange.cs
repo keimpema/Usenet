@@ -15,19 +15,19 @@ namespace Usenet.Nntp.Models
         /// <summary>
         /// The article number the range starts from.
         /// </summary>
-        public int From { get; }
+        public long From { get; }
 
         /// <summary>
         /// The optional article number the range ends with.
         /// </summary>
-        public int? To { get; }
+        public long? To { get; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="NntpArticleRange"/> class.
         /// </summary>
         /// <param name="from">The article number to start the range from.</param>
         /// <param name="to">The optional article number to end the range with.</param>
-        private NntpArticleRange(int from, int? to)
+        private NntpArticleRange(long from, long? to)
         {
             From = from;
             To = to;
@@ -38,7 +38,7 @@ namespace Usenet.Nntp.Models
         /// </summary>
         /// <param name="number">The article number.</param>
         /// <returns>A new range of one article.</returns>
-        public static NntpArticleRange SingleArticle(int number)
+        public static NntpArticleRange SingleArticle(long number)
         {
             return new NntpArticleRange(number, number);
         }
@@ -48,7 +48,7 @@ namespace Usenet.Nntp.Models
         /// </summary>
         /// <param name="from">The article number to start the range from.</param>
         /// <returns>A new range containing the given article and all following.</returns>
-        public static NntpArticleRange AllFollowing(int from)
+        public static NntpArticleRange AllFollowing(long from)
         {
             return new NntpArticleRange(from, null);
         }
@@ -59,7 +59,7 @@ namespace Usenet.Nntp.Models
         /// <param name="from">The article number to start the range from.</param>
         /// <param name="to">The article number to end the range with.</param>
         /// <returns>A new range containg all articles between and including <paramref name="from"/> and <paramref name="to"/>.</returns>
-        public static NntpArticleRange Range(int from, int to)
+        public static NntpArticleRange Range(long from, long to)
         {
             return new NntpArticleRange(from, to);
         }

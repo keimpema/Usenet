@@ -62,7 +62,7 @@ namespace Usenet.Nntp.Parsers
                 log.LogError("Invalid response message: {Message} Expected: {{number}} {{messageid}}", message);
             }
 
-            int.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out int number);
+            long.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out long number);
             string messageId = responseSplit.Length > 1 ? responseSplit[1] : string.Empty;
 
             if (dataBlock == null)
