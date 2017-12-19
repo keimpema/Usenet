@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Usenet.Exceptions;
 using Usenet.Nntp;
 using Usenet.Nntp.Builders;
@@ -12,49 +11,49 @@ namespace UsenetTests.Nntp.Builders
     public class NntpArticleBuilderTests
     {
         [Fact]
-        public void BuildingArticleWithoutMessageIdShouldThrow()
+        public void BuildWithoutMessageIdShouldThrow()
         {
             var exception = Assert.Throws<NntpException>(() =>
             {
                 new NntpArticleBuilder()
                     .SetFrom("superuser")
                     .SetSubject("subject")
-                    .AddGroup("alt.test")
+                    .AddGroups("alt.test")
                     .Build();
             });
             Assert.Equal($"{NntpHeaders.MessageId} header not set", exception.Message);
         }
 
         [Fact]
-        public void BuildingArticleWithoutFromShouldThrow()
+        public void BuildWithoutFromShouldThrow()
         {
             var exception = Assert.Throws<NntpException>(() =>
             {
                 new NntpArticleBuilder()
                     .SetMessageId("123@hhh.net")
                     .SetSubject("subject")
-                    .AddGroup("alt.test")
+                    .AddGroups("alt.test")
                     .Build();
             });
             Assert.Equal($"{NntpHeaders.From} header not set", exception.Message);
         }
 
         [Fact]
-        public void BuildingArticleWithoutSubjectShouldThrow()
+        public void BuildWithoutSubjectShouldThrow()
         {
             var exception = Assert.Throws<NntpException>(() =>
             {
                 new NntpArticleBuilder()
                     .SetMessageId("123@hhh.net")
                     .SetFrom("superuser")
-                    .AddGroup("alt.test")
+                    .AddGroups("alt.test")
                     .Build();
             });
             Assert.Equal($"{NntpHeaders.Subject} header not set", exception.Message);
         }
 
         [Fact]
-        public void BuildingArticleWithoutGroupShouldThrow()
+        public void BuildWithoutGroupShouldThrow()
         {
             var exception = Assert.Throws<NntpException>(() =>
             {
@@ -72,7 +71,7 @@ namespace UsenetTests.Nntp.Builders
         [InlineData(NntpHeaders.MessageId)]
         [InlineData(NntpHeaders.Newsgroups)]
         [InlineData(NntpHeaders.From)]
-        public void BuildingArticleWithReservedHeaderKeyShouldThrow(string headerKey)
+        public void SettingHeaderWithReservedKeyShouldThrow(string headerKey)
         {
             var exception = Assert.Throws<NntpException>(() =>
             {
@@ -106,13 +105,12 @@ namespace UsenetTests.Nntp.Builders
         }
 
         [Fact]
-        public void ArticleBuilderShouldBuildArticle()
+        public void BuildShouldBuildArticle()
         {
-            var expected = new NntpArticle(0, "123@hhh.net", new MultiValueDictionary<string, string>(() => new List<string>())
+            var expected = new NntpArticle(0, "123@hhh.net", "alt.test;alt.testclient", new MultiValueDictionary<string, string>
             {
                 {NntpHeaders.Subject, "subject"},
                 {NntpHeaders.From, "superuser"},
-                {NntpHeaders.Newsgroups, "alt.test;alt.testclient"},
                 {"Header1", "Value1" },
                 {"Header1", "Value2" },
             }, null);
@@ -122,8 +120,8 @@ namespace UsenetTests.Nntp.Builders
                 .SetFrom("superuser")
                 .AddHeader("Header1", "Value2")
                 .SetSubject("subject")
-                .AddGroup("alt.test")
-                .AddGroup("alt.testclient")
+                .AddGroups("alt.test")
+                .AddGroups("alt.testclient")
                 .AddHeader("Header1", "Value1")
                 .Build();
 
@@ -134,13 +132,12 @@ namespace UsenetTests.Nntp.Builders
         }
 
         [Fact]
-        public void ArticleBuilderInitializedFromExistingArticleShouldBuildSameArticle()
+        public void BuildInitializedFromExistingArticleShouldBuildSameArticle()
         {
-            var expected = new NntpArticle(0, "123@hhh.net", new MultiValueDictionary<string, string>(() => new List<string>())
+            var expected = new NntpArticle(0, "123@hhh.net", "alt.test;alt.testclient", new MultiValueDictionary<string, string>
             {
                 {NntpHeaders.Subject, "subject"},
                 {NntpHeaders.From, "superuser"},
-                {NntpHeaders.Newsgroups, "alt.test;alt.testclient"},
                 {"Header1", "Value1" },
                 {"Header1", "Value2" },
             }, null);
@@ -149,11 +146,9 @@ namespace UsenetTests.Nntp.Builders
                 .InitializeFrom(expected)
                 .Build();
 
-
             Assert.Equal(expected, actual);
             Assert.True(expected.Equals(actual));
             Assert.True(expected == actual);
         }
-
     }
 }

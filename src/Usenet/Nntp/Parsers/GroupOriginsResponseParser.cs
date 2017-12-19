@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
@@ -10,10 +11,7 @@ namespace Usenet.Nntp.Parsers
     {
         private static readonly ILogger log = LibraryLogging.Create<GroupOriginsResponseParser>();
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == 215;
-        }
+        public bool IsSuccessResponse(int code) => code == 215;
 
         public NntpGroupOriginsResponse Parse(int code, string message, IEnumerable<string> dataBlock)
         {
@@ -21,8 +19,16 @@ namespace Usenet.Nntp.Parsers
             {
                 return new NntpGroupOriginsResponse(code, message, false, new NntpGroupOrigin[0]);
             }
-            
-            return new NntpGroupOriginsResponse(code, message, true, EnumerateGroupOrigins(dataBlock));
+
+            IEnumerable<NntpGroupOrigin> groupOrigins = EnumerateGroupOrigins(dataBlock);
+            if (dataBlock is ICollection<string>)
+            {
+                // no need to keep enumerator if input is not a stream
+                // memoize the items (https://en.wikipedia.org/wiki/Memoization)
+                groupOrigins = groupOrigins.ToList();
+            }
+
+            return new NntpGroupOriginsResponse(code, message, true, groupOrigins);
         }
 
         private static IEnumerable<NntpGroupOrigin> EnumerateGroupOrigins(IEnumerable<string> dataBlock)
@@ -48,7 +54,6 @@ namespace Usenet.Nntp.Parsers
                     DateTimeOffset.FromUnixTimeSeconds(createdAtTimestamp),
                     lineSplit[2]);
             }
-
         }
     }
 }

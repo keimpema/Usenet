@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
@@ -23,10 +24,7 @@ namespace Usenet.Nntp.Parsers
             this.requestType = requestType;
         }
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == successCode;
-        }
+        public bool IsSuccessResponse(int code) => code == successCode;
 
         public NntpGroupsResponse Parse(int code, string message, IEnumerable<string> dataBlock)
         {
@@ -35,7 +33,15 @@ namespace Usenet.Nntp.Parsers
                 return new NntpGroupsResponse(code, message, false, new NntpGroup[0]);
             }
 
-            return new NntpGroupsResponse(code, message, true, EnumerateGroups(dataBlock));
+            IEnumerable<NntpGroup> groups = EnumerateGroups(dataBlock);
+            if (dataBlock is ICollection<string>)
+            {
+                // no need to keep enumerator if input is not a stream
+                // memoize the items (https://en.wikipedia.org/wiki/Memoization)
+                groups = groups.ToList();
+            }
+
+            return new NntpGroupsResponse(code, message, true, groups);
         }
 
         private IEnumerable<NntpGroup> EnumerateGroups(IEnumerable<string> dataBlock)

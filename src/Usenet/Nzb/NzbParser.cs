@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Usenet.Exceptions;
+using Usenet.Extensions;
+using Usenet.Nntp.Models;
 using Usenet.Util;
 
 namespace Usenet.Nzb
@@ -15,11 +17,6 @@ namespace Usenet.Nzb
     public class NzbParser
     {
         private static readonly Regex fileNameRegex = new Regex("\"([^\"]*)\"");
-
-        /// <summary>
-        /// Represents the NZB namespace.
-        /// </summary>
-        public static readonly XNamespace NzbNamespace = "http://www.newzbin.com/DTD/2003/nzb";
 
         /// <summary>
         /// Parses the xml input string into an instance of the <see cref="NzbDocument"/> class.
@@ -34,7 +31,7 @@ namespace Usenet.Nzb
             Guard.ThrowIfNullOrEmpty(text, nameof(text));
 
             XDocument doc = XDocument.Parse(text);
-            XNamespace ns = NzbNamespace;
+            XNamespace ns = NzbKeywords.Namespace;
             XElement nzbElement = doc.Element(ns + NzbKeywords.Nzb);
 
             if (nzbElement == null)
@@ -53,13 +50,13 @@ namespace Usenet.Nzb
                 Namespace = ns
             };
 
-            ILookup<string, string> metaData = GetMetaData(context, nzbElement);
-            List<NzbFile> files = GetFiles(context, nzbElement);
+            MultiValueDictionary<string, string> metaData = GetMetaData(context, nzbElement);
+            IEnumerable<NzbFile> files = GetFiles(context, nzbElement);
 
             return new NzbDocument(metaData, files);
         }
 
-        private static ILookup<string, string> GetMetaData(NzbParserContext context, XContainer nzbElement)
+        private static MultiValueDictionary<string, string> GetMetaData(NzbParserContext context, XContainer nzbElement)
         {
             XElement headElement = nzbElement.Element(context.Namespace + NzbKeywords.Head);
             if (headElement == null)
@@ -67,22 +64,23 @@ namespace Usenet.Nzb
                 return null;
             }
 
-            IEnumerable<Tuple<string, string>> metaData = 
+            IEnumerable<Tuple<string, string>> headers = 
                 from metaElement in headElement.Elements(context.Namespace + NzbKeywords.Meta)
                 let typeAttribute = metaElement.Attribute(NzbKeywords.Type)
                 where typeAttribute != null
                 select new Tuple<string, string>(typeAttribute.Value, metaElement.Value);
 
-            return metaData.ToLookup(tuple => tuple.Item1, tuple => tuple.Item2);
+            var dict = new MultiValueDictionary<string, string>();
+            foreach (Tuple<string, string> header in headers)
+            {
+                dict.Add(header.Item1, header.Item2);
+            }
+            return dict;
         }
 
-        private static List<NzbFile> GetFiles(NzbParserContext context, XContainer nzbElement)
-        {
-            return nzbElement
-                .Elements(context.Namespace + NzbKeywords.File)
-                .Select(f => GetFile(context, f))
-                .ToList();
-        }
+        private static IEnumerable<NzbFile> GetFiles(NzbParserContext context, XContainer nzbElement) => nzbElement
+            .Elements(context.Namespace + NzbKeywords.File)
+            .Select(f => GetFile(context, f));
 
         private static NzbFile GetFile(NzbParserContext context, XElement fileElement)
         {
@@ -94,8 +92,8 @@ namespace Usenet.Nzb
             DateTimeOffset date = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
             string subject = (string) fileElement.Attribute(NzbKeywords.Subject) ?? string.Empty;
             string fileName = GetFileName(subject);
-            List<string> groups = GetGroups(context, fileElement.Element(context.Namespace + NzbKeywords.Groups));
-            List<NzbSegment> segments = GetSegments(context, fileElement.Element(context.Namespace + NzbKeywords.Segments));
+            NntpGroups groups = GetGroups(context, fileElement.Element(context.Namespace + NzbKeywords.Groups));
+            IEnumerable<NzbSegment> segments = GetSegments(context, fileElement.Element(context.Namespace + NzbKeywords.Segments));
 
             return new NzbFile(poster, subject, fileName, date, groups, segments);
         }
@@ -118,23 +116,37 @@ namespace Usenet.Nzb
             return yencPos < 0 ? subject : subject.Substring(0, yencPos).Trim();
         }
 
-        private static List<string> GetGroups(NzbParserContext context, XContainer groupsElement)
+        private static NntpGroups GetGroups(NzbParserContext context, XContainer groupsElement)
         {
-            return groupsElement?
+            IEnumerable<string> groups = groupsElement?
                 .Elements(context.Namespace + NzbKeywords.Group)
-                .Select(g => g.Value)
-                .ToList();
+                .Select(g => g.Value);
+            return new NntpGroups(groups);
         }
 
-        private static List<NzbSegment> GetSegments(NzbParserContext context, XContainer segentsElement)
+        private static IEnumerable<NzbSegment> GetSegments(NzbParserContext context, XContainer segentsElement)
         {
-            return segentsElement?
+            IOrderedEnumerable<XElement> elements = segentsElement?
                 .Elements(context.Namespace + NzbKeywords.Segment)
-                .Select(GetSegment)
-                .ToList();
+                .OrderBy(element => ((string)element.Attribute(NzbKeywords.Number)).ToIntSafe());
+
+            if (elements == null)
+            {
+                return null;
+            }
+
+            long offset = 0;
+            var segments = new List<NzbSegment>();
+            foreach (XElement element in elements)
+            {
+                NzbSegment segment = GetSegment(element, offset);
+                segments.Add(segment);
+                offset += segment.Size;
+            }
+            return segments;
         }
 
-        private static NzbSegment GetSegment(XElement element)
+        private static NzbSegment GetSegment(XElement element, long offset)
         {
             if (!int.TryParse((string)element.Attribute(NzbKeywords.Number), out int number))
             {
@@ -144,9 +156,7 @@ namespace Usenet.Nzb
             {
                 throw new InvalidNzbDataException(Resources.Nzb.InvalidOrMissingBytesAttribute);
             }
-            string messageId = element.Value;
-
-            return new NzbSegment(number, size, messageId);
+            return new NzbSegment(number, offset, size, element.Value);
         }
     }
 }

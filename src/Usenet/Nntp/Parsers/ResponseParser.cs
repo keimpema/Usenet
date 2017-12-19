@@ -12,14 +12,9 @@ namespace Usenet.Nntp.Parsers
             this.successCodes = successCodes ?? new int[0];
         }
 
-        public bool IsSuccessResponse(int code)
-        {
-            return successCodes.Contains(code);
-        }
+        public bool IsSuccessResponse(int code) => successCodes.Contains(code);
 
-        public NntpResponse Parse(int code, string message)
-        {
-            return new NntpResponse(code, message, IsSuccessResponse(code));
-        }
+        public NntpResponse Parse(int code, string message) => 
+            new NntpResponse(code, message, IsSuccessResponse(code));
     }
 }

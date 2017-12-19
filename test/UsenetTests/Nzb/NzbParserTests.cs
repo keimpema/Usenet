@@ -40,8 +40,8 @@ namespace UsenetTests.Nzb
             const string nzbText = @"<nzb xmlns=""http://www.newzbin.com/DTD/2003/nzb""></nzb>";
             NzbDocument actualDocument = NzbParser.Parse(nzbText);
 
-            Assert.Equal(0, actualDocument.MetaData.Count);
-            Assert.Equal(0, actualDocument.Files.Count);
+            Assert.Empty(actualDocument.MetaData);
+            Assert.Empty(actualDocument.Files);
         }
 
         [Fact]
@@ -56,8 +56,8 @@ namespace UsenetTests.Nzb
 </nzb>";
             NzbDocument actualDocument = NzbParser.Parse(nzbText);
 
-            Assert.Equal(1, actualDocument.MetaData.Count);
-            Assert.Equal(2, actualDocument.MetaData["tag"].Count());
+            Assert.Single(actualDocument.MetaData);
+            Assert.Equal(2, actualDocument.MetaData["tag"].Count);
             Assert.NotNull(actualDocument.MetaData["tag"].SingleOrDefault(m => m == "SD"));
             Assert.NotNull(actualDocument.MetaData["tag"].SingleOrDefault(m => m == "avi"));
         }
@@ -72,8 +72,8 @@ namespace UsenetTests.Nzb
 
             NzbDocument actualDocument = NzbParser.Parse(nzbText);
 
-            Assert.Equal(0, actualDocument.MetaData.Count);
-            Assert.Equal(1, actualDocument.Files.Count);
+            Assert.Empty(actualDocument.MetaData);
+            Assert.Single(actualDocument.Files);
         }
 
         [Fact]
@@ -209,6 +209,5 @@ namespace UsenetTests.Nzb
             NzbDocument actualDocument = NzbParser.Parse(nzbText);
             Assert.Equal("[2 / 9] - TWD151 - 153.rar", actualDocument.Files.Single().FileName);
         }
-
     }
 }

@@ -8,9 +8,9 @@ namespace UsenetTests.Nntp.Models
     public class NntpArticleTests
     {
         [Fact]
-        public void ArticlesShouldBeEqual()
+        public void EqualsWithSameValuesShouldReturnTrue()
         {
-            var article1 = new NntpArticle(0, "123@bla.nl", new MultiValueDictionary<string, string>
+            var article1 = new NntpArticle(0, "123@bla.nl", null, new MultiValueDictionary<string, string>
             {
                 {"h1", "val1"},
                 {"h3", "val3"},
@@ -18,7 +18,7 @@ namespace UsenetTests.Nntp.Models
                 {"h3", "val4"},
             }, new List<string>(0));
 
-            var article2 = new NntpArticle(0, "123@bla.nl", new MultiValueDictionary<string, string>
+            var article2 = new NntpArticle(0, "123@bla.nl", null, new MultiValueDictionary<string, string>
             {
                 {"h3", "val4"},
                 {"h3", "val3"},

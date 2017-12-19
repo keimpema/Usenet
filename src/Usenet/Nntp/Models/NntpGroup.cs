@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Usenet.Util;
 
 namespace Usenet.Nntp.Models
@@ -43,7 +45,7 @@ namespace Usenet.Nntp.Models
         /// <summary>
         /// A list of <see cref="NntpArticle"/> numbers in the <see cref="NntpGroup"/>.
         /// </summary>
-        public IEnumerable<long> ArticleNumbers { get; }
+        public IEnumerable<long> ArticleNumbers { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="NntpGroup"/> class.
@@ -71,28 +73,38 @@ namespace Usenet.Nntp.Models
             HighWaterMark = highWaterMark;
             PostingStatus = Enum.IsDefined(typeof(NntpPostingStatus), postingStatus) ? postingStatus : NntpPostingStatus.Unknown;
             OtherGroup = otherGroup ?? string.Empty;
-            ArticleNumbers = articleNumbers ?? new long[0];
+
+            switch (articleNumbers)
+            {
+                case null:
+                    // create empty immutable list
+                    ArticleNumbers = new List<long>(0).ToImmutableList();
+                    break;
+
+                case ICollection<long> collection:
+                    // make immutable
+                    ArticleNumbers = collection.OrderBy(n => n).ToImmutableList();
+                    break;
+
+                default:
+                    // not a collection but a stream of numbers, keep enumerator
+                    // this is immutable already
+                    ArticleNumbers = articleNumbers;
+                    break;
+            }
         }
 
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hash = 17;
-                hash *= 23 + Name.GetHashCode();
-                hash *= 23 + ArticleCount.GetHashCode();
-                hash *= 23 + LowWaterMark.GetHashCode();
-                hash *= 23 + HighWaterMark.GetHashCode();
-                hash *= 23 + PostingStatus.GetHashCode();
-                hash *= 23 + OtherGroup.GetHashCode();
-                hash *= 23 + ArticleNumbers.GetHashCode();
-                return hash;
-            }
-        }
+        public override int GetHashCode() => HashCode.Start
+            .Hash(Name)
+            .Hash(ArticleCount)
+            .Hash(LowWaterMark)
+            .Hash(HighWaterMark)
+            .Hash(PostingStatus)
+            .Hash(OtherGroup);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpGroup"/> value.
@@ -105,14 +117,32 @@ namespace Usenet.Nntp.Models
             {
                 return false;
             }
-            return 
-                Name.Equals(other.Name) && 
+
+            bool equals =
+                Name.Equals(other.Name) &&
                 ArticleCount.Equals(other.ArticleCount) &&
-                LowWaterMark.Equals(other.LowWaterMark) && 
+                LowWaterMark.Equals(other.LowWaterMark) &&
                 HighWaterMark.Equals(other.HighWaterMark) &&
-                PostingStatus.Equals(other.PostingStatus) && 
-                OtherGroup.Equals(other.OtherGroup) &&
-                MultiSetComparer<long>.Instance.Equals(ArticleNumbers, other.ArticleNumbers);
+                PostingStatus.Equals(other.PostingStatus) &&
+                OtherGroup.Equals(other.OtherGroup);
+
+            if (!equals)
+            {
+                return false;
+            }
+
+            // need to memoize the enumerables for comparison
+            // otherwise they can not be used anymore after this call to equals
+            if (!(ArticleNumbers is ICollection<long>))
+            {
+                ArticleNumbers = ArticleNumbers.ToList();
+            }
+            if (!(other.ArticleNumbers is ICollection<long>))
+            {
+                other.ArticleNumbers = other.ArticleNumbers.ToList();
+            }
+
+            return ArticleNumbers.SequenceEqual(other.ArticleNumbers);
         }
 
         /// <summary>
@@ -128,14 +158,8 @@ namespace Usenet.Nntp.Models
         /// <param name="first">The first <see cref="NntpGroup"/>.</param>
         /// <param name="second">The second <see cref="NntpGroup"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator ==(NntpGroup first, NntpGroup second)
-        {
-            if ((object)first == null)
-            {
-                return (object)second == null;
-            }
-            return first.Equals(second);
-        }
+        public static bool operator ==(NntpGroup first, NntpGroup second) => 
+            (object) first == null ? (object) second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="NntpGroup"/> value is unequal to the second <see cref="NntpGroup"/> value.

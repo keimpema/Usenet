@@ -17,25 +17,27 @@ namespace UsenetTests.Nntp.Writers
         {
             new object[] 
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "1@example.com", null, new List<string>(0))), new []
+                new XSerializable<NntpArticle>(new NntpArticle(0, "1@example.com", "group", null, new List<string>(0))), new []
                 {
                     "Message-ID: <1@example.com>",
+                    "Newsgroups: group",
                     "",
                     "."
                 }
             },
             new object[]
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "<2@example.com>", null, new List<string>(0))), new []
+                new XSerializable<NntpArticle>(new NntpArticle(0, "<2@example.com>", "group", null, new List<string>(0))), new []
                 {
                     "Message-ID: <2@example.com>",
+                    "Newsgroups: group",
                     "",
                     "."
                 }
             },
             new object[]
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "3@example.com", new MultiValueDictionary<string, string> (() => new List<string>())
+                new XSerializable<NntpArticle>(new NntpArticle(0, "3@example.com", "group", new MultiValueDictionary<string, string>
                 {
                     { "From", "\"Demo User\" <nobody@example.net>"},
                 }, new List<string>
@@ -44,6 +46,7 @@ namespace UsenetTests.Nntp.Writers
                 })), new []
                 {
                     "Message-ID: <3@example.com>",
+                    "Newsgroups: group",
                     "From: \"Demo User\" <nobody@example.net>",
                     "",
                     "This is just a test article.",
@@ -52,7 +55,7 @@ namespace UsenetTests.Nntp.Writers
             },
             new object[]
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "4@example.com", new MultiValueDictionary<string, string> (() => new List<string>())
+                new XSerializable<NntpArticle>(new NntpArticle(0, "4@example.com", "group", new MultiValueDictionary<string, string>
                 {
                     { "Message-ID", "<9999@example.com>"}, // not allowed, should be ignored
                 }, new List<string>
@@ -61,6 +64,7 @@ namespace UsenetTests.Nntp.Writers
                 })), new []
                 {
                     "Message-ID: <4@example.com>",
+                    "Newsgroups: group",
                     "",
                     "This is just a test article.",
                     "."
@@ -68,7 +72,7 @@ namespace UsenetTests.Nntp.Writers
             },
             new object[]
             {
-                new XSerializable<NntpArticle>(new NntpArticle(0, "5@example.com", new MultiValueDictionary<string, string> (() => new List<string>())
+                new XSerializable<NntpArticle>(new NntpArticle(0, "5@example.com", "group", new MultiValueDictionary<string, string>
                 {
                     { "Message-ID", "9999@example.com"}, // not allowed, should be ignored
                 }, new List<string>
@@ -77,6 +81,7 @@ namespace UsenetTests.Nntp.Writers
                 })), new []
                 {
                     "Message-ID: <5@example.com>",
+                    "Newsgroups: group",
                     "",
                     "This is just a test article.",
                     "."

@@ -6,6 +6,21 @@
     internal class NzbKeywords
     {
         /// <summary>
+        /// NZB document public identifier.
+        /// </summary>
+        public const string PubId = "-//newzBin//DTD NZB 1.1//EN";
+
+        /// <summary>
+        /// NZB document system identifier.
+        /// </summary>
+        public const string SysId = "http://www.newzbin.com/DTD/nzb/nzb-1.1.dtd";
+
+        /// <summary>
+        /// NZB document namespace.
+        /// </summary>
+        public const string Namespace = "http://www.newzbin.com/DTD/2003/nzb";
+
+        /// <summary>
         /// The nzb element.
         /// </summary>
         public const string Nzb = "nzb";

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Usenet.Exceptions;
 using Usenet.Extensions;
 using Usenet.Nntp.Models;
@@ -14,33 +16,35 @@ namespace Usenet.Nntp.Builders
     /// </summary>
     public class NntpArticleBuilder
     {
-        private const string groupSeperator = ";";
+        private static readonly ILogger log = LibraryLogging.Create<NntpArticleBuilder>();
+
         private const string dateFormat = "dd MMM yyyy HH:mm:ss";
 
         private static readonly string[] reservedHeaderKeys = {
+            NntpHeaders.Date,
             NntpHeaders.From,
             NntpHeaders.Subject,
             NntpHeaders.MessageId,
             NntpHeaders.Newsgroups
         };
 
+        private MultiValueDictionary<string, string> headers;
+        private NntpGroupsBuilder groupsBuilder;
         private NntpMessageId messageId;
         private string from;
         private string subject;
         private DateTimeOffset? dateTime;
-
-        private readonly MultiValueDictionary<string, string> headers;
-        private readonly List<string> body;
-        private readonly List<string> groups;
+        private IEnumerable<string> body;
 
         /// <summary>
         /// Creates a new instance of the <see cref="NntpArticleBuilder"/> class.
         /// </summary>
         public NntpArticleBuilder()
         {
-            headers = new MultiValueDictionary<string, string>(() => new List<string>());
+            headers = new MultiValueDictionary<string, string>();
             body = new List<string>();
-            groups = new List<string>();
+            groupsBuilder = new NntpGroupsBuilder();
+            messageId = NntpMessageId.Empty;
         }
 
         /// <summary>
@@ -51,22 +55,31 @@ namespace Usenet.Nntp.Builders
         /// <returns>The <see cref="NntpArticleBuilder"/> so that additional calls can be chained.</returns>
         public NntpArticleBuilder InitializeFrom(NntpArticle article)
         {
-            messageId = null;
+            Guard.ThrowIfNull(article, nameof(article));
+
+            messageId = new NntpMessageId(article.MessageId.Value);
+            groupsBuilder = new NntpGroupsBuilder().Add(article.Groups);
+            headers = new MultiValueDictionary<string, string>();
             from = null;
             subject = null;
+            dateTime = null;
+            body = null;
 
-            headers.Clear();
-            body.Clear();
-            groups.Clear();
-
-            foreach (KeyValuePair<string, ICollection<string>> header in article.Headers)
+            foreach (KeyValuePair<string, ImmutableHashSet<string>> header in article.Headers)
             {
                 foreach (string value in header.Value)
                 {
                     switch (header.Key)
                     {
                         case NntpHeaders.MessageId:
-                            // skip additional messageid's
+                            if (!messageId.HasValue)
+                            {
+                                messageId = value;
+                            }
+                            else
+                            {
+                                log.LogWarning("Found more than 1 {messageId} header. Skipping it.", NntpHeaders.MessageId);
+                            }
                             break;
 
                         case NntpHeaders.From:
@@ -74,12 +87,20 @@ namespace Usenet.Nntp.Builders
                             {
                                 from = value;
                             }
+                            else
+                            {
+                                log.LogWarning("Found more than 1 {from} header. Skipping it.", NntpHeaders.From);
+                            }
                             break;
 
                         case NntpHeaders.Subject:
                             if (subject == null)
                             {
                                 subject = value;
+                            }
+                            else
+                            {
+                                log.LogWarning("Found more than 1 {subject} header. Skipping it.", NntpHeaders.Subject);
                             }
                             break;
 
@@ -92,12 +113,20 @@ namespace Usenet.Nntp.Builders
                                 {
                                     dateTime = headerDateTime;
                                 }
+                                else
+                                {
+                                    log.LogWarning("{date} header has invalid value {value}. Skipping it.", NntpHeaders.Date, value);
+                                }
+                            }
+                            else
+                            {
+                                log.LogWarning("Found more than 1 {date} header. Skipping it.", NntpHeaders.Date);
                             }
                             break;
 
                         case NntpHeaders.Newsgroups:
                             // convert group header to list of groups, do not add as header
-                            AddGroups(value);
+                            groupsBuilder.Add(value);
                             break;
 
                         default:
@@ -107,8 +136,8 @@ namespace Usenet.Nntp.Builders
                 }
             }
 
-            body.AddRange(article.Body);
-            messageId = article.MessageId;
+            // make copy of body
+            body = article.Body.ToList();
 
             return this;
         }
@@ -158,26 +187,43 @@ namespace Usenet.Nntp.Builders
         }
 
         /// <summary>
-        /// Adds a newsgroup to the required <see cref="NntpHeaders.Newsgroups"/> header.
+        /// Sets the article's body to the provided enumerable collection of string lines.
         /// </summary>
-        /// <param name="value">The group to add to the <see cref="NntpHeaders.Newsgroups"/> header.</param>
+        /// <param name="lines">An enumerable collection of string lines.</param>
         /// <returns>The <see cref="NntpArticleBuilder"/> so that additional calls can be chained.</returns>
-        public NntpArticleBuilder AddGroup(string value)
+        public NntpArticleBuilder SetBody(IEnumerable<string> lines)
         {
-            Guard.ThrowIfNull(value, nameof(value));
-            AddGroups(value);
+            body = lines.ThrowIfNull(nameof(lines));
             return this;
         }
 
         /// <summary>
-        /// Removes a newsgroup from the <see cref="NntpHeaders.Newsgroups"/> header.
+        /// Add newsgroups to the required <see cref="NntpHeaders.Newsgroups"/> header.
         /// </summary>
-        /// <param name="value">The group to remove from the <see cref="NntpHeaders.Newsgroups"/> header.</param>
+        /// <param name="values">The groups to add to the <see cref="NntpHeaders.Newsgroups"/> header.</param>
         /// <returns>The <see cref="NntpArticleBuilder"/> so that additional calls can be chained.</returns>
-        public NntpArticleBuilder RemoveGroup(string value)
+        public NntpArticleBuilder AddGroups(params NntpGroups[] values)
         {
-            Guard.ThrowIfNull(value, nameof(value));
-            RemoveGroups(value);
+            Guard.ThrowIfNull(values, nameof(values));
+            foreach (NntpGroups value in values)
+            {
+                groupsBuilder.Add(value);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Removes newsgroups from the <see cref="NntpHeaders.Newsgroups"/> header.
+        /// </summary>
+        /// <param name="values">The groups to remove from the <see cref="NntpHeaders.Newsgroups"/> header.</param>
+        /// <returns>The <see cref="NntpArticleBuilder"/> so that additional calls can be chained.</returns>
+        public NntpArticleBuilder RemoveGroups(params NntpGroups[] values)
+        {
+            Guard.ThrowIfNull(values, nameof(values));
+            foreach (NntpGroups value in values)
+            {
+                groupsBuilder.Remove(value);
+            }
             return this;
         }
 
@@ -218,26 +264,31 @@ namespace Usenet.Nntp.Builders
         }
 
         /// <summary>
-        /// Adds a line to the body of the article.
+        /// Adds a line to the body of the article. This will memoize the internal body collection if needed.
         /// </summary>
         /// <param name="line">The text line to add to the body.</param>
         /// <returns>The <see cref="NntpArticleBuilder"/> so that additional calls can be chained.</returns>
         public NntpArticleBuilder AddLine(string line)
         {
             Guard.ThrowIfNull(line, nameof(line));
-            body.Add(line);
+            ICollection<string> bodyList = EnsureMemoizedBody();
+            bodyList.Add(line);
             return this;
         }
 
         /// <summary>
-        /// Adds multiple lines to the body of the article.
+        /// Adds multiple lines to the body of the article. This will memoize the internal body collection if needed.
         /// </summary>
         /// <param name="lines">The text lines to add to the body.</param>
         /// <returns>The <see cref="NntpArticleBuilder"/> so that additional calls can be chained.</returns>
         public NntpArticleBuilder AddLines(IEnumerable<string> lines)
         {
             Guard.ThrowIfNull(lines, nameof(lines));
-            body.AddRange(lines);
+            ICollection<string> bodyList = EnsureMemoizedBody();
+            foreach (string line in lines)
+            {
+                bodyList.Add(line);
+            }
             return this;
         }
 
@@ -247,7 +298,7 @@ namespace Usenet.Nntp.Builders
         /// <returns>The <see cref="NntpArticle"/>.</returns>
         public NntpArticle Build()
         {
-            if (string.IsNullOrWhiteSpace(messageId))
+            if (!messageId.HasValue)
             {
                 throw new NntpException(Resources.Nntp.MessageIdHeaderNotSet);
             }
@@ -259,14 +310,15 @@ namespace Usenet.Nntp.Builders
             {
                 throw new NntpException(Resources.Nntp.SubjectHeaderNotSet);
             }
-            if (groups.Count == 0)
+            if (groupsBuilder.IsEmpty)
             {
                 throw new NntpException(Resources.Nntp.NewsgroupsHeaderNotSet);
             }
 
+            NntpGroups groups = groupsBuilder.Build();
+
             headers.Add(NntpHeaders.From, from);
             headers.Add(NntpHeaders.Subject, subject);            
-            headers.Add(NntpHeaders.Newsgroups, string.Join(groupSeperator, groups));
 
             if (dateTime.HasValue)
             {
@@ -274,26 +326,17 @@ namespace Usenet.Nntp.Builders
                 headers.Add(NntpHeaders.Date, $"{formattedDate} +0000");
             }
 
-            return new NntpArticle(0, messageId, headers, body);
+            return new NntpArticle(0, messageId, groups, headers, body);
         }
 
-        private void AddGroups(string value)
+        private ICollection<string> EnsureMemoizedBody()
         {
-            foreach (string group in value.Split(new[] { groupSeperator }, StringSplitOptions.RemoveEmptyEntries))
+            if (!(body is ICollection<string>))
             {
-                if (!groups.Contains(group))
-                {
-                    groups.Add(group);
-                }
+                // memoize the body lines
+                body = body.ToList();
             }
-        }
-
-        private void RemoveGroups(string value)
-        {
-            foreach (string group in value.Split(new[] { groupSeperator }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                groups.RemoveAll(g => g == group);
-            }
+            return (ICollection<string>)body;
         }
     }
 }

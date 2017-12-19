@@ -2,7 +2,7 @@
 
 namespace Usenet.Nntp.Parsers
 {
-    internal class PostingStatusParser
+    internal static class PostingStatusParser
     {
         public static NntpPostingStatus Parse(string input, out string otherGroup)
         {
@@ -27,7 +27,6 @@ namespace Usenet.Nntp.Parsers
 
                 default: return NntpPostingStatus.Unknown;
             }
-
         }
     }
 }

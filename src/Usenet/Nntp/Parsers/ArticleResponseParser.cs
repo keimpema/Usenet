@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
+using Usenet.Nntp.Builders;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
 using Usenet.Util;
@@ -43,10 +45,7 @@ namespace Usenet.Nntp.Parsers
             }
         }
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == successCode;
-        }
+        public bool IsSuccessResponse(int code) => code == successCode;
 
         public NntpArticleResponse Parse(int code, string message, IEnumerable<string> dataBlock)
         {
@@ -68,7 +67,7 @@ namespace Usenet.Nntp.Parsers
             if (dataBlock == null)
             {
                 // no headers and no body
-                return new NntpArticleResponse(code, message, true, new NntpArticle(number, messageId, null, null));
+                return new NntpArticleResponse(code, message, true, new NntpArticle(number, messageId, null, null, null));
             }
 
             using (IEnumerator<string> enumerator = dataBlock.GetEnumerator())
@@ -78,14 +77,26 @@ namespace Usenet.Nntp.Parsers
                     ? GetHeaders(enumerator)
                     : MultiValueDictionary<string, string>.Empty;
 
+                // get groups
+                NntpGroups groups = headers.TryGetValue(NntpHeaders.Newsgroups, out ICollection<string> values)
+                    ? new NntpGroupsBuilder().Add(values).Build()
+                    : null;
+
                 // get body if requested
                 IEnumerable<string> bodyLines = (requestType & ArticleRequestType.Body) == ArticleRequestType.Body
                     ? EnumerateBodyLines(enumerator)
                     : new string[0];
 
+                if (dataBlock is ICollection<string>)
+                {
+                    // no need to keep enumerator if input is not a stream
+                    // memoize the body lines
+                    bodyLines = bodyLines.ToList();
+                }
+
                 return new NntpArticleResponse(
                     code, message, true,
-                    new NntpArticle(number, messageId, headers, bodyLines));
+                    new NntpArticle(number, messageId, groups, headers, bodyLines));
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
@@ -9,10 +10,7 @@ namespace Usenet.Nntp.Parsers
     {
         private static readonly ILogger log = LibraryLogging.Create<GroupResponseParser>();
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == 211;
-        }
+        public bool IsSuccessResponse(int code) => code == 211;
 
         public NntpGroupResponse Parse(int code, string message, IEnumerable<string> dataBlock)
         {
@@ -35,10 +33,23 @@ namespace Usenet.Nntp.Parsers
             long.TryParse(responseSplit.Length > 2 ? responseSplit[2] : null, out long highWaterMark);
             string name = responseSplit.Length > 3 ? responseSplit[3] : string.Empty;
 
-            return new NntpGroupResponse(
-                code, message, true,
-                new NntpGroup(name, articleCount, lowWaterMark, highWaterMark, NntpPostingStatus.Unknown, string.Empty,
-                    EnumerateArticleNumbers(dataBlock)));
+            IEnumerable<long> articleNumbers = EnumerateArticleNumbers(dataBlock);
+            if (dataBlock is ICollection<string>)
+            {
+                // no need to keep enumerator if input is not a stream
+                // memoize the article numbers (https://en.wikipedia.org/wiki/Memoization)
+                articleNumbers = articleNumbers.ToList();
+            }
+
+            return new NntpGroupResponse(code, message, true,
+                new NntpGroup(
+                    name, 
+                    articleCount, 
+                    lowWaterMark, 
+                    highWaterMark, 
+                    NntpPostingStatus.Unknown, 
+                    string.Empty,
+                    articleNumbers));
         }
 
         private static IEnumerable<long> EnumerateArticleNumbers(IEnumerable<string> dataBlock)

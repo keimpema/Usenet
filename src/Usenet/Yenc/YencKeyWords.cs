@@ -2,9 +2,9 @@
 {
     internal class YencKeywords
     {
-        public const string Header = "=ybegin ";
-        public const string PartHeader = "=ypart ";
-        public const string Footer = "=yend ";
+        public const string YBegin = "=ybegin";
+        public const string YPart = "=ypart";
+        public const string YEnd = "=yend";
         public const string Name = "name";
         public const string Size = "size";
         public const string Line = "line";

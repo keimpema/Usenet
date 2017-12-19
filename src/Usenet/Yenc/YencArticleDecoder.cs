@@ -11,6 +11,8 @@ namespace Usenet.Yenc
     /// </summary>
     public class YencArticleDecoder
     {
+        private const string yEnd = YencKeywords.YEnd + " ";
+
         /// <summary>
         /// Decodes yEnc-encoded text into a <see cref="YencArticle"/>
         /// using the default Usenet character encoding.
@@ -50,18 +52,17 @@ namespace Usenet.Yenc
 
                 while (enumerator.MoveNext())
                 {
-                    if (enumerator.Current.StartsWith(YencKeywords.Footer))
+                    if (enumerator.Current.StartsWith(yEnd))
                     {
                         footer = YencMeta.ParseFooter(YencMeta.ParseLine(enumerator.Current));
 
-                        // skip rest if there is some
+                        // skip remainder if there is some
                         while (enumerator.MoveNext()){}
                         break;
                     }
                     byte[] encodedBytes = encoding.GetBytes(enumerator.Current);
                     decodedBytesIndex += YencLineDecoder.Decode(encodedBytes, decodedBytes, decodedBytesIndex);
                 }
-
                 return new YencArticle(header, footer, decodedBytes);
             }
         }

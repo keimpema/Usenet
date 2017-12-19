@@ -35,14 +35,6 @@ namespace Lib.Extensions
         {
             using (Stream stream = fileInfo.CreateReadStream())
             {
-                if (stream.CanSeek)
-                {
-                    stream.Seek(0L, SeekOrigin.Begin);
-                }
-                if (stream is MemoryStream memoryStream)
-                {
-                    return memoryStream.ToArray();
-                }
                 using (var ms = new MemoryStream())
                 {
                     stream.CopyTo(ms);
@@ -50,6 +42,5 @@ namespace Lib.Extensions
                 }
             }
         }
-
     }
 }

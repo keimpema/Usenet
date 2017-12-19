@@ -8,10 +8,7 @@ namespace Usenet.Nntp.Parsers
     {
         private static readonly ILogger log = LibraryLogging.Create<GroupResponseParser>();
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == 211;
-        }
+        public bool IsSuccessResponse(int code) => code == 211;
 
         public NntpGroupResponse Parse(int code, string message)
         {
@@ -19,8 +16,7 @@ namespace Usenet.Nntp.Parsers
             {
                 return new NntpGroupResponse(
                     code, message, false,
-                    new NntpGroup(string.Empty, 0, 0, 0, NntpPostingStatus.Unknown,
-                        string.Empty, new long[0]));
+                    new NntpGroup(string.Empty, 0, 0, 0, NntpPostingStatus.Unknown, string.Empty, new long[0]));
             }
 
             string[] responseSplit = message.Split(' ');
@@ -36,8 +32,14 @@ namespace Usenet.Nntp.Parsers
 
             return new NntpGroupResponse(
                 code, message, true,
-                new NntpGroup(name, articleCount, lowWaterMark, highWaterMark, NntpPostingStatus.Unknown,
-                    string.Empty, new long[0]));
+                new NntpGroup(
+                    name, 
+                    articleCount, 
+                    lowWaterMark, 
+                    highWaterMark, 
+                    NntpPostingStatus.Unknown,
+                    string.Empty, 
+                    new long[0]));
         }
     }
 }

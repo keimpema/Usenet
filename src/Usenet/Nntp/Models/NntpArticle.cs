@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using Usenet.Extensions;
 using Usenet.Util;
 
 namespace Usenet.Nntp.Models
@@ -21,46 +23,68 @@ namespace Usenet.Nntp.Models
         public NntpMessageId MessageId { get; }
 
         /// <summary>
+        /// The NNTP newsgroups this <see cref="NntpArticle"/> is posted in.
+        /// </summary>
+        public NntpGroups Groups { get; }
+
+        /// <summary>
         /// The header dictionary of the <see cref="NntpArticle"/>.
         /// </summary>
-        public MultiValueDictionary<string, string> Headers { get; }
+        public ImmutableDictionary<string, ImmutableHashSet<string>> Headers { get; }
 
         /// <summary>
         /// The body of the <see cref="NntpArticle"/>.
         /// </summary>
-        public IEnumerable<string> Body { get; }
+        public IEnumerable<string> Body { get; private set; }
 
         /// <summary>
         /// Creates a new <see cref="NntpArticle"/> object.
         /// </summary>
         /// <param name="number">The number of the <see cref="NntpArticle"/>.</param>
         /// <param name="messageId">The <see cref="NntpMessageId"/> of the <see cref="NntpArticle"/>.</param>
+        /// <param name="groups">The NNTP newsgroups this <see cref="NntpArticle"/> is posted in.</param>
         /// <param name="headers">The headers of the <see cref="NntpArticle"/>.</param>
         /// <param name="body">The body of the <see cref="NntpArticle"/>.</param>
-        public NntpArticle(long number, NntpMessageId messageId, MultiValueDictionary<string, string> headers, IEnumerable<string> body)
+        public NntpArticle(
+            long number, 
+            NntpMessageId messageId, 
+            NntpGroups groups, 
+            IDictionary<string, ICollection<string>> headers, 
+            IEnumerable<string> body)
         {
             Number = number;
             MessageId = messageId ?? NntpMessageId.Empty;
-            Headers = headers ?? MultiValueDictionary<string, string>.Empty;
-            Body = body ?? new string[0];
+            Groups = groups ?? NntpGroups.Empty;
+            Headers = (headers ?? MultiValueDictionary<string, string>.Empty).ToImmutableDictionaryWithHashSets();
+
+            switch (body)
+            {
+                case null:
+                    // create empty immutable list
+                    Body = new List<string>(0).ToImmutableList();
+                    break;
+
+                case ICollection<string> collection:
+                    // make immutable
+                    Body = collection.ToImmutableList();
+                    break;
+
+                default:
+                    // not a collection but a stream of lines, keep enumerator
+                    // this is immutable already
+                    Body = body;
+                    break;
+            }
         }
 
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hash = 17;
-                hash *= 23 + Number.GetHashCode();
-                hash *= 23 + MessageId.GetHashCode();
-                hash *= 23 + Headers.GetHashCode();
-                hash *= 23 + Body.GetHashCode();
-                return hash;
-            }
-        }
+        public override int GetHashCode() => HashCode.Start
+            .Hash(Number)
+            .Hash(MessageId)
+            .Hash(Groups);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpArticle"/> value.
@@ -73,11 +97,40 @@ namespace Usenet.Nntp.Models
             {
                 return false;
             }
-            return 
+
+            bool equals =
                 Number.Equals(other.Number) &&
                 MessageId.Equals(other.MessageId) &&
-                Headers.Equals(other.Headers) &&
-                Body.SequenceEqual(other.Body);
+                Groups.Equals(other.Groups);
+
+            if (!equals)
+            {
+                return false;
+            }
+
+            // compare headers
+            foreach (KeyValuePair<string, ImmutableHashSet<string>> pair in Headers)
+            {
+                if (!other.Headers.TryGetValue(pair.Key, out ImmutableHashSet<string> value) ||
+                    !pair.Value.SetEquals(value))
+                {
+                    return false;
+                }
+            }
+
+            // need to memoize the enumerables for comparison
+            // otherwise they can not be used anymore after this call to equals
+            if (!(Body is ICollection<string>))
+            {
+                Body = Body.ToList();
+            }
+            if (!(other.Body is ICollection<string>))
+            {
+                other.Body = other.Body.ToList();
+            }
+
+            // compare body
+            return Body.SequenceEqual(other.Body);
         }
 
         /// <summary>
@@ -93,14 +146,8 @@ namespace Usenet.Nntp.Models
         /// <param name="first">The first <see cref="NntpArticle"/>.</param>
         /// <param name="second">The second <see cref="NntpArticle"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator ==(NntpArticle first, NntpArticle second)
-        {
-            if ((object)first == null)
-            {
-                return (object)second == null;
-            }
-            return first.Equals(second);
-        }
+        public static bool operator ==(NntpArticle first, NntpArticle second) => 
+            (object) first == null ? (object) second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="NntpArticle"/> value is unequal to the second <see cref="NntpArticle"/> value.

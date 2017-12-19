@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Usenet.Util
+﻿namespace Usenet.Util
 {
     internal static class Crc32
     {
@@ -13,7 +11,7 @@ namespace Usenet.Util
             lookupTable = CreateLookupTable();
         }
 
-        public static uint CalculateChecksum(IList<byte> buffer)
+        public static uint CalculateChecksum(byte[] buffer)
         {
             Guard.ThrowIfNull(buffer, nameof(buffer));
             
@@ -24,6 +22,13 @@ namespace Usenet.Util
             }
             return value ^ seed;
         }
+
+        public static uint Initialize() => seed;
+
+        public static uint Calculate(uint value, int @byte) => 
+            (value >> 8) ^ lookupTable[(value & 0xFF) ^ @byte];
+
+        public static uint Finalize(uint value) => value ^ seed;
 
         private static uint[] CreateLookupTable()
         {

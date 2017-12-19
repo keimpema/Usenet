@@ -1,4 +1,5 @@
 ﻿using System;
+using Usenet.Util;
 
 namespace Usenet.Nntp.Models
 {
@@ -27,7 +28,7 @@ namespace Usenet.Nntp.Models
         /// </summary>
         /// <param name="from">The article number to start the range from.</param>
         /// <param name="to">The optional article number to end the range with.</param>
-        private NntpArticleRange(long from, long? to)
+        public NntpArticleRange(long from, long? to)
         {
             From = from;
             To = to;
@@ -38,20 +39,14 @@ namespace Usenet.Nntp.Models
         /// </summary>
         /// <param name="number">The article number.</param>
         /// <returns>A new range of one article.</returns>
-        public static NntpArticleRange SingleArticle(long number)
-        {
-            return new NntpArticleRange(number, number);
-        }
+        public static NntpArticleRange SingleArticle(long number) => new NntpArticleRange(number, number);
 
         /// <summary>
         /// Creates a range containing the given article and all following.
         /// </summary>
         /// <param name="from">The article number to start the range from.</param>
         /// <returns>A new range containing the given article and all following.</returns>
-        public static NntpArticleRange AllFollowing(long from)
-        {
-            return new NntpArticleRange(from, null);
-        }
+        public static NntpArticleRange AllFollowing(long from) => new NntpArticleRange(@from, null);
 
         /// <summary>
         /// Creates a range containing all articles between and including <paramref name="from"/> and <paramref name="to"/>.
@@ -59,48 +54,28 @@ namespace Usenet.Nntp.Models
         /// <param name="from">The article number to start the range from.</param>
         /// <param name="to">The article number to end the range with.</param>
         /// <returns>A new range containg all articles between and including <paramref name="from"/> and <paramref name="to"/>.</returns>
-        public static NntpArticleRange Range(long from, long to)
-        {
-            return new NntpArticleRange(from, to);
-        }
+        public static NntpArticleRange Range(long from, long to) => new NntpArticleRange(@from, to);
 
         /// <summary>
         /// Returns the text representation of the value formatted according to the NNTP specifications.
         /// </summary>
         /// <returns>The text representation of the value formatted according to the NNTP specifications</returns>
-        public override string ToString()
-        {
-            if (To == null)
-            {
-                return $"{From}-";
-            }
-            return To.Value == From ? From.ToString() : $"{From}-{To.Value}";
-        }
+        public override string ToString() => 
+            To == null ? $"{From}-" : (To.Value == From ? From.ToString() : $"{From}-{To.Value}");
 
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hash = 17;
-                hash *= 23 + From.GetHashCode();
-                hash *= 23 + To.GetHashCode();
-                return hash;
-            }
-        }
+        public override int GetHashCode() => HashCode.Start.Hash(From).Hash(To);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpArticleRange"/> value.
         /// </summary>
         /// <param name="other">A <see cref="NntpArticleRange"/> object to compare to this instance.</param>
         /// <returns>true if <paramref name="other" /> has the same value as this instance; otherwise, false.</returns>
-        public bool Equals(NntpArticleRange other)
-        {
-            return (object)other != null && From == other.From && To == other.To;
-        }
+        public bool Equals(NntpArticleRange other) => 
+            (object)other != null && From == other.From && To == other.To;
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpArticleRange"/> value.
@@ -115,10 +90,8 @@ namespace Usenet.Nntp.Models
         /// <param name="first">The first <see cref="NntpArticleRange"/>.</param>
         /// <param name="second">The second <see cref="NntpArticleRange"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator ==(NntpArticleRange first, NntpArticleRange second)
-        {
-            return (object)first == null ? (object)second == null : first.Equals(second);
-        }
+        public static bool operator ==(NntpArticleRange first, NntpArticleRange second) => 
+            (object)first == null ? (object)second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="NntpArticleRange"/> value is unequal to the second <see cref="NntpArticleRange"/> value.

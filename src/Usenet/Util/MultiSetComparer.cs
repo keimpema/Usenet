@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Usenet.Util
 {
@@ -114,13 +113,7 @@ namespace Usenet.Util
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public int GetHashCode(IEnumerable<T> enumerable)
-        {
-            Guard.ThrowIfNull(enumerable, nameof(enumerable));
-            return enumerable
-                .OrderBy(x => x)
-                .Aggregate(17, (current, val) => current * 23 + (val?.GetHashCode() ?? 42));
-        }
+        public int GetHashCode(IEnumerable<T> enumerable) => HashCode.Start.Hash(enumerable);
 
         /// <summary>
         /// A singleton instance of the <see cref="MultiSetComparer{T}"/> class that

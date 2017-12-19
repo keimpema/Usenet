@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Usenet.Nntp.Models
 {
@@ -34,10 +35,7 @@ namespace Usenet.Nntp.Models
         /// Returns the text representation of the value formatted according to the NNTP specifications.
         /// </summary>
         /// <returns>The text representation of the value formatted according to the NNTP specifications.</returns>
-        public override string ToString()
-        {
-            return $"{Value.ToUniversalTime():yyyyMMdd HHmmss} GMT";
-        }
+        public override string ToString() => $"{Value.ToUniversalTime():yyyyMMdd HHmmss} GMT";
 
         /// <summary>
         /// Converts a <see cref="NntpDateTime"/> implicitly to a string.
@@ -61,20 +59,14 @@ namespace Usenet.Nntp.Models
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode();
-        }
+        public override int GetHashCode() => EqualityComparer<DateTimeOffset>.Default.GetHashCode(Value);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpDateTime"/> value.
         /// </summary>
         /// <param name="other">A <see cref="NntpDateTime"/> object to compare to this instance.</param>
         /// <returns>true if <paramref name="other" /> has the same value as this instance; otherwise, false.</returns>
-        public bool Equals(NntpDateTime other)
-        {
-            return (object)other != null && Value == other.Value;
-        }
+        public bool Equals(NntpDateTime other) => (object)other != null && Value == other.Value;
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="object"/> value.
@@ -89,10 +81,8 @@ namespace Usenet.Nntp.Models
         /// <param name="first">The first <see cref="NntpDateTime"/>.</param>
         /// <param name="second">The second <see cref="NntpDateTime"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator ==(NntpDateTime first, NntpDateTime second)
-        {
-            return (object)first == null ? (object)second == null : first.Equals(second);
-        }
+        public static bool operator ==(NntpDateTime first, NntpDateTime second) => 
+            (object)first == null ? (object)second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="NntpDateTime"/> value is unequal to the second <see cref="NntpDateTime"/> value.

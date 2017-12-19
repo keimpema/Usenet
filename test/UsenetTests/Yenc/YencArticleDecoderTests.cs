@@ -8,13 +8,13 @@ using Xunit;
 
 namespace UsenetTests.Yenc
 {
-    public class YencDecoderTests : IClassFixture<TestData>
+    public class YencArticleDecoderTests : IClassFixture<TestData>
     {
         private readonly TestData testData;
 
-        public YencDecoderTests(TestData testData)
+        public YencArticleDecoderTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(YencDecoderTests));
+            this.testData = testData.Initialize(typeof(YencArticleDecoderTests));
         }
 
         [Fact]

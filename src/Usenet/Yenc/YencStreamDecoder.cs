@@ -10,8 +10,11 @@ namespace Usenet.Yenc
     /// Represents a yEnc-encoded article decoder.
     /// The article is decoded streaming.
     /// </summary>
-    public class YencStreamDecoder
+    public static class YencStreamDecoder
     {
+        private const string yEnd = YencKeywords.YEnd + " ";
+        private const int bufferSize = 4096;
+
         /// <summary>
         /// Decodes yEnc-encoded text into a <see cref="YencStream"/>
         /// using the default Usenet character encoding.
@@ -26,7 +29,7 @@ namespace Usenet.Yenc
         /// using the specified character encoding.
         /// </summary>
         /// <param name="encodedLines">The yEnc-encoded lines to decode.</param>
-        /// <param name="encoding">The charcter encoding to use.</param>
+        /// <param name="encoding">The character encoding to use.</param>
         /// <returns>A <see cref="YencStream"/> containing a stream of decoded binary data and meta-data.</returns>
         public static YencStream Decode(IEnumerable<string> encodedLines, Encoding encoding)
         {
@@ -47,10 +50,10 @@ namespace Usenet.Yenc
 
         private static IEnumerable<byte[]> EnumerateData(IEnumerator<string> enumerator, Encoding encoding)
         {
-            var buffer = new byte[4096];
+            var buffer = new byte[bufferSize];
             while (enumerator.MoveNext())
             {
-                if (enumerator.Current.StartsWith(YencKeywords.Footer))
+                if (enumerator.Current.StartsWith(yEnd))
                 {
                     // skip rest if there is some
                     while (enumerator.MoveNext()) { }

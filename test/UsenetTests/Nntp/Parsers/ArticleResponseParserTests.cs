@@ -17,7 +17,7 @@ namespace UsenetTests.Nntp.Parsers
             {
                 220, "123 <123@poster.com>", (int) ArticleRequestType.Article,
                 new string[0],
-                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null,
+                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null, null,
                     new List<string>(0)))
             },
             new object[]
@@ -31,8 +31,8 @@ namespace UsenetTests.Nntp.Parsers
                     "This is just a test article (1).",
                     "With two lines."
                 },
-                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>",
-                    new MultiValueDictionary<string, string>(() => new List<string>())
+                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null,
+                    new MultiValueDictionary<string, string>
                     {
                         {"Path", "pathost!demo!whitehouse!not-for-mail"},
                         {"From", "\"Demo User\" <nobody@example.net>"},
@@ -50,7 +50,7 @@ namespace UsenetTests.Nntp.Parsers
                     "This is just a test article (2).",
                     "With two lines."
                 },
-                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null, new List<string>
+                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null, null, new List<string>
                 {
                     "This is just a test article (2).",
                     "With two lines."
@@ -66,8 +66,8 @@ namespace UsenetTests.Nntp.Parsers
                     " line3",
                     "Path: pathost!demo!whitehouse!not-for-mail"
                 },
-                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>",
-                    new MultiValueDictionary<string, string>(() => new List<string>())
+                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null,
+                    new MultiValueDictionary<string, string>
                     {
                         {"Multi", "line1 line2 line3"},
                         {"Path", "pathost!demo!whitehouse!not-for-mail"},
@@ -81,8 +81,8 @@ namespace UsenetTests.Nntp.Parsers
                     "Invalid header line",
                     "Path: pathost!demo!whitehouse!not-for-mail"
                 },
-                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>",
-                    new MultiValueDictionary<string, string>(() => new List<string>())
+                new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null,
+                    new MultiValueDictionary<string, string>
                     {
                         {"Path", "pathost!demo!whitehouse!not-for-mail"},
                     }, new List<string>(0)))
@@ -102,12 +102,7 @@ namespace UsenetTests.Nntp.Parsers
             NntpArticleResponse articleResponse = new ArticleResponseParser((ArticleRequestType)requestType)
                 .Parse(responseCode, responseMessage, lines.ToList());
             NntpArticle actualArticle = articleResponse.Article;
-
-            Assert.Equal(expectedArticle.Number, actualArticle.Number);
-            Assert.Equal(expectedArticle.MessageId, actualArticle.MessageId);
-            Assert.Equal(expectedArticle.Headers, actualArticle.Headers);
-            Assert.Equal(expectedArticle.Body.ToArray(), actualArticle.Body.ToArray());
-
+            Assert.Equal(expectedArticle, actualArticle);
         }
 
         public static IEnumerable<object[]> InvalidMultiLineParseData = new[]
@@ -132,7 +127,7 @@ namespace UsenetTests.Nntp.Parsers
 
         [Theory]
         [MemberData(nameof(InvalidMultiLineParseData))]
-        public void InvalidMultiLineResponseWithShouldBeParsedCorrectly(
+        public void InvalidMultiLineResponseShouldBeParsedCorrectly(
             int responseCode,
             string responseMessage,
             int requestType,

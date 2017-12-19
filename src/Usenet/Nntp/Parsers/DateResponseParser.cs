@@ -9,10 +9,7 @@ namespace Usenet.Nntp.Parsers
     {
         private static readonly ILogger log = LibraryLogging.Create<DateResponseParser>();
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == 111;
-        }
+        public bool IsSuccessResponse(int code) => code == 111;
 
         public NntpDateResponse Parse(int code, string message)
         {

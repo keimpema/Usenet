@@ -9,7 +9,7 @@ namespace Usenet.Util
     /// </summary>
     /// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
-    public class MultiValueDictionary<TKey, TValue> : Dictionary<TKey, ICollection<TValue>>, IEquatable<MultiValueDictionary<TKey, TValue>>
+    internal class MultiValueDictionary<TKey, TValue> : Dictionary<TKey, ICollection<TValue>>, IEquatable<MultiValueDictionary<TKey, TValue>>
     {
         private readonly Func<ICollection<TValue>> collectionFactory;
 
@@ -72,15 +72,9 @@ namespace Usenet.Util
 
         /// <summary>Gets the number of elements contained in the <see cref="MultiValueDictionary{TKey,TValue}" />.</summary>
         /// <returns>The number of elements contained in the <see cref="MultiValueDictionary{TKey,TValue}" />.</returns>
-        public new int Count
-        {
-            get
-            {
-                return Values
-                    .Where(valueCollection => valueCollection != null)
-                    .Sum(valueCollection => valueCollection.Count);
-            }
-        }
+        public new int Count => Values
+            .Where(valueCollection => valueCollection != null)
+            .Sum(valueCollection => valueCollection.Count);
 
         /// <summary>
         /// Represents an empty <see cref="MultiValueDictionary{TKey,TValue}"/>.
@@ -88,6 +82,12 @@ namespace Usenet.Util
         /// <returns>A new empty instance on every call of the <see cref="MultiValueDictionary{TKey,TValue}"/> 
         /// that uses a <see cref="HashSet{TValue}"/> factory internally.</returns>
         public static MultiValueDictionary<TKey, TValue> Empty => new MultiValueDictionary<TKey, TValue>();
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer hash code.</returns>
+        public override int GetHashCode() => HashCode.Start.Hash(this);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="MultiValueDictionary{TKey,TValue}"/> value.
@@ -104,7 +104,8 @@ namespace Usenet.Util
             foreach (KeyValuePair<TKey, ICollection<TValue>> pair in this)
             {
                 ICollection<TValue> thisValues = pair.Value;
-                if (!other.TryGetValue(pair.Key, out ICollection<TValue> otherValues) || !comp.Equals(thisValues, otherValues))
+                if (!other.TryGetValue(pair.Key, out ICollection<TValue> otherValues) || 
+                    !comp.Equals(thisValues, otherValues))
                 {
                     return false;
                 }
@@ -117,19 +118,7 @@ namespace Usenet.Util
         /// </summary>
         /// <param name="obj">An <see cref="object"/> to compare to this instance.</param>
         /// <returns>true if <paramref name="obj" /> has the same value as this instance; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as MultiValueDictionary<TKey, TValue>);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            return Values.Aggregate(17, (current, value) => current * 23 + (value?.GetHashCode() ?? 42));
-        }
+        public override bool Equals(object obj) => Equals(obj as MultiValueDictionary<TKey, TValue>);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="MultiValueDictionary{TKey,TValue}"/> 
@@ -138,15 +127,8 @@ namespace Usenet.Util
         /// <param name="first">The first <see cref="MultiValueDictionary{TKey,TValue}"/>.</param>
         /// <param name="second">The second <see cref="MultiValueDictionary{TKey,TValue}"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator == (MultiValueDictionary<TKey, TValue> first,
-            MultiValueDictionary<TKey, TValue> second)
-        {
-            if ((object) first == null)
-            {
-                return (object) second == null;
-            }
-            return first.Equals(second);
-        }
+        public static bool operator == (MultiValueDictionary<TKey, TValue> first, MultiValueDictionary<TKey, TValue> second) => 
+            (object) first == null ? (object) second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="MultiValueDictionary{TKey,TValue}"/> 
@@ -155,8 +137,7 @@ namespace Usenet.Util
         /// <param name="first">The first <see cref="MultiValueDictionary{TKey,TValue}"/>.</param>
         /// <param name="second">The second <see cref="MultiValueDictionary{TKey,TValue}"/>.</param>
         /// <returns>true if <paramref name="first"/> has a different value than <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator !=(MultiValueDictionary<TKey, TValue> first,
-            MultiValueDictionary<TKey, TValue> second) => !(first == second);
-
+        public static bool operator != (MultiValueDictionary<TKey, TValue> first, MultiValueDictionary<TKey, TValue> second) => 
+            !(first == second);
     }
 }

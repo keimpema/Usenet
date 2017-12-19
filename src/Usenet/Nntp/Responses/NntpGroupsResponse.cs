@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Usenet.Nntp.Models;
 
 namespace Usenet.Nntp.Responses
@@ -28,7 +29,24 @@ namespace Usenet.Nntp.Responses
         public NntpGroupsResponse(int code, string message, bool success, IEnumerable<NntpGroup> groups) 
             : base(code, message, success)
         {
-            Groups = groups ?? new NntpGroup[0];
+            switch (groups)
+            {
+                case null:
+                    // create empty immutable list
+                    Groups = new List<NntpGroup>(0).ToImmutableList();
+                    break;
+
+                case ICollection<NntpGroup> collection:
+                    // make immutable
+                    Groups = collection.ToImmutableList();
+                    break;
+
+                default:
+                    // not a collection but a stream of lines, keep enumerator
+                    // this is immutable already
+                    Groups = groups;
+                    break;
+            }
         }
     }
 }

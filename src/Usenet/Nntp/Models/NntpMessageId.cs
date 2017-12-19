@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Usenet.Extensions;
 
 namespace Usenet.Nntp.Models
 {
@@ -20,18 +23,24 @@ namespace Usenet.Nntp.Models
         /// <param name="value">A string representing a <see cref="NntpMessageId"/>. 
         /// Wrapping characters "&lt;" and "&gt;" will be stripped.</param>
         public NntpMessageId(string value)
-        {            
-            Value = value?.TrimStart('<').TrimEnd('>');
+        {
+            Value = value?.TrimStart('<').TrimEnd('>').Pack();
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="NntpMessageId" /> object has a valid value.
+        /// </summary>
+        /// <returns>
+        /// true if the current <see cref="NntpMessageId" /> object has a value; 
+        /// false if the current <see cref="NntpMessageId" /> object has no value.
+        /// </returns>
+        public bool HasValue => !string.IsNullOrWhiteSpace(Value);
 
         /// <summary>
         /// Wraps the <see cref="NntpMessageId"/> in "&lt;" and "&gt;" according to the NNTP specifications.
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return Value == null ? null : string.Concat("<", Value, ">");
-        }
+        public override string ToString() => Value == null ? null : string.Concat("<", Value, ">");
 
         /// <summary>
         /// Converts a <see cref="NntpMessageId"/> implicitly to a string.
@@ -54,20 +63,14 @@ namespace Usenet.Nntp.Models
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            return Value?.GetHashCode() ?? 42;
-        }
+        public override int GetHashCode() => EqualityComparer<string>.Default.GetHashCode(Value);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpMessageId"/> value.
         /// </summary>
         /// <param name="other">A <see cref="NntpMessageId"/> object to compare to this instance.</param>
         /// <returns>true if <paramref name="other" /> has the same value as this instance; otherwise, false.</returns>
-        public bool Equals(NntpMessageId other)
-        {
-            return (object) other != null && Value == other.Value;
-        }
+        public bool Equals(NntpMessageId other) => (object) other != null && Value == other.Value;
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="object"/> value.
@@ -82,10 +85,8 @@ namespace Usenet.Nntp.Models
         /// <param name="first">The first <see cref="NntpMessageId"/>.</param>
         /// <param name="second">The second <see cref="NntpMessageId"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator ==(NntpMessageId first, NntpMessageId second)
-        {
-            return (object) first == null ? (object) second == null : first.Equals(second);
-        }
+        public static bool operator ==(NntpMessageId first, NntpMessageId second) => 
+            (object) first == null ? (object) second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="NntpMessageId"/> value is unequal to the second <see cref="NntpMessageId"/> value.

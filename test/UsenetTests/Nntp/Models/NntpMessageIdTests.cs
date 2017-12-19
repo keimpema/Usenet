@@ -10,7 +10,7 @@ namespace UsenetTests.Nntp.Models
         [InlineData("123@example.com", "<123@example.com>")]
         [InlineData("<123@example.com>", "<123@example.com>")]
         [InlineData(null, null)]
-        public void MessageIdShouldBeFormattedCorrectly(string messageId, string expectedMessageId)
+        public void ShouldBeFormattedCorrectly(string messageId, string expectedMessageId)
         {
             var actual = new NntpMessageId(messageId);
             Assert.Equal(expectedMessageId, actual.ToString());
@@ -21,7 +21,7 @@ namespace UsenetTests.Nntp.Models
         [InlineData("123@example.com", "<123@example.com>")]
         [InlineData("<123@example.com>", "<123@example.com>")]
         [InlineData(null, null)]
-        public void MessageIdsAreEquatable(string first, string second)
+        public void EqualsWithSameValuesShouldReturnTrue(string first, string second)
         {
             var firstMessageId = new NntpMessageId(first);
             var secondMessageId = new NntpMessageId(second);
@@ -32,7 +32,7 @@ namespace UsenetTests.Nntp.Models
 
         [Theory]
         [InlineData("123@example.com")]
-        public void MessageIdCanBeSerializedToJsonAndDeserializedBackToMessageId(string messageId)
+        public void SerializedInstanceShouldBeDeserializedCorrectly(string messageId)
         {
             var expectedMessageId = new NntpMessageId(messageId);
             string json = JsonConvert.SerializeObject(expectedMessageId);

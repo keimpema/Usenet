@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Usenet.Nntp.Models;
 
 namespace Usenet.Nntp.Writers
@@ -18,11 +19,13 @@ namespace Usenet.Nntp.Writers
         private static void WriteHeaders(INntpConnection connection, NntpArticle article)
         {
             WriteHeader(connection, NntpHeaders.MessageId, article.MessageId);
-            foreach (KeyValuePair<string, ICollection<string>> header in article.Headers)
+            WriteHeader(connection, NntpHeaders.Newsgroups, article.Groups.ToString());
+            foreach (KeyValuePair<string, ImmutableHashSet<string>> header in article.Headers)
             {
-                if (header.Key == NntpHeaders.MessageId)
+                if (header.Key == NntpHeaders.MessageId ||
+                    header.Key == NntpHeaders.Newsgroups)
                 {
-                    // skip message-id, already written
+                    // skip message-id and newsgroups, they are already written
                     continue;
                 }
                 foreach (string value in header.Value)

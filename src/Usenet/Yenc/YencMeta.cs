@@ -7,6 +7,9 @@ namespace Usenet.Yenc
 {
     internal class YencMeta
     {
+        private const string yBegin = YencKeywords.YBegin + " ";
+        private const string yPart = YencKeywords.YPart + " ";
+
         public static IDictionary<string, string> GetHeaders(IEnumerator<string> enumerator)
         {
             if (enumerator == null)
@@ -15,7 +18,7 @@ namespace Usenet.Yenc
             }
             while (enumerator.MoveNext())
             {
-                if (enumerator.Current.StartsWith(YencKeywords.Header))
+                if (enumerator.Current.StartsWith(yBegin))
                 {
                     return ParseLine(enumerator.Current);
                 }
@@ -29,7 +32,7 @@ namespace Usenet.Yenc
             {
                 throw new InvalidYencDataException(Resources.Yenc.MissingPartHeader);
             }
-            if (enumerator.MoveNext() && enumerator.Current.StartsWith(YencKeywords.PartHeader))
+            if (enumerator.MoveNext() && enumerator.Current.StartsWith(yPart))
             {
                 return ParseLine(enumerator.Current);
             }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Usenet.Nntp.Models;
 
 namespace Usenet.Nntp.Responses
@@ -25,7 +26,24 @@ namespace Usenet.Nntp.Responses
         public NntpGroupOriginsResponse(int code, string message, bool success, IEnumerable<NntpGroupOrigin> groupOrigins) 
             : base(code, message, success)
         {
-            GroupOrigins = groupOrigins ?? new NntpGroupOrigin[0];
+            switch (groupOrigins)
+            {
+                case null:
+                    // create empty immutable list
+                    GroupOrigins = new List<NntpGroupOrigin>(0).ToImmutableList();
+                    break;
+
+                case ICollection<NntpGroupOrigin> collection:
+                    // make immutable
+                    GroupOrigins = collection.ToImmutableList();
+                    break;
+
+                default:
+                    // not a collection but a stream of lines, keep enumerator
+                    // this is immutable already
+                    GroupOrigins = groupOrigins;
+                    break;
+            }
         }
     }
 }

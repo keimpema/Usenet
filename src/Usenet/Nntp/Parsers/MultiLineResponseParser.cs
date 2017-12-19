@@ -13,14 +13,9 @@ namespace Usenet.Nntp.Parsers
             this.successCodes = successCodes ?? new int[0];
         }
 
-        public bool IsSuccessResponse(int code)
-        {
-            return successCodes.Contains(code);
-        }
+        public bool IsSuccessResponse(int code) => successCodes.Contains(code);
 
-        public NntpMultiLineResponse Parse(int code, string message, IEnumerable<string> dataBlock)
-        {
-            return new NntpMultiLineResponse(code, message, IsSuccessResponse(code), dataBlock);
-        }
+        public NntpMultiLineResponse Parse(int code, string message, IEnumerable<string> dataBlock) => 
+            new NntpMultiLineResponse(code, message, IsSuccessResponse(code), dataBlock);
     }
 }

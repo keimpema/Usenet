@@ -20,6 +20,8 @@ namespace UsenetTests.Yenc
         [InlineData(@"yenc.singlepart.00000005.ntx")]
         [InlineData(@"yenc.multipart.00000020.ntx")]
         [InlineData(@"yenc.multipart.00000021.ntx")]
+        [InlineData(@"yenc.singlepart.test (1.2).ntx")]
+        [InlineData(@"yenc.multipart.test (1.2).ntx")]
         public void ArticleShouldBeValid(string fileName)
         {
             YencArticle article = YencArticleDecoder.Decode(

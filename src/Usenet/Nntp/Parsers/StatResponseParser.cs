@@ -8,10 +8,7 @@ namespace Usenet.Nntp.Parsers
     {
         private static readonly ILogger log = LibraryLogging.Create<StatResponseParser>();
 
-        public bool IsSuccessResponse(int code)
-        {
-            return code == (int) NntpStatResponseType.ArticleExists;
-        }
+        public bool IsSuccessResponse(int code) => code == (int) NntpStatResponseType.ArticleExists;
 
         public NntpStatResponse Parse(int code, string message)
         {

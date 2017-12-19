@@ -1,4 +1,5 @@
 ﻿using System;
+using Usenet.Util;
 
 namespace Usenet.Nntp.Models
 {
@@ -44,17 +45,10 @@ namespace Usenet.Nntp.Models
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hash = 17;
-                hash *= 23 + Name.GetHashCode();
-                hash *= 23 + CreatedAt.GetHashCode();
-                hash *= 23 + CreatedBy.GetHashCode();
-                return hash;
-            }
-        }
+        public override int GetHashCode() => HashCode.Start
+            .Hash(Name)
+            .Hash(CreatedAt)
+            .Hash(CreatedBy);
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal to the specified <see cref="NntpGroupOrigin"/> value.
@@ -86,14 +80,8 @@ namespace Usenet.Nntp.Models
         /// <param name="first">The first <see cref="NntpGroupOrigin"/>.</param>
         /// <param name="second">The second <see cref="NntpGroupOrigin"/>.</param>
         /// <returns>true if <paramref name="first"/> has the same value as <paramref name="second"/>; otherwise false.</returns>
-        public static bool operator ==(NntpGroupOrigin first, NntpGroupOrigin second)
-        {
-            if ((object)first == null)
-            {
-                return (object)second == null;
-            }
-            return first.Equals(second);
-        }
+        public static bool operator ==(NntpGroupOrigin first, NntpGroupOrigin second) => 
+            (object) first == null ? (object) second == null : first.Equals(second);
 
         /// <summary>
         /// Returns a value indicating whether the frst <see cref="NntpGroupOrigin"/> value is unequal to the second <see cref="NntpGroupOrigin"/> value.

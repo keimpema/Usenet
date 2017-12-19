@@ -1,0 +1,13 @@
+From: escape@yenc.net
+Subject: should encode spaces and tabs in the first and last column and dot in the first column
+
+=ybegin part=1 total=2 line=10 size=120 name=test (1.2).txt
+=ypart begin=1 end=67
+=n34567890
+=`34567890
+=I34567890
+123456789.
+123456789=`
+123456789=I
+1. 	567890
+=yend size=67 part=1 pcrc32=ef9b1b81

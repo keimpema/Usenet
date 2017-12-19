@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Usenet.Nntp.Parsers
 {
-    internal class HeaderDateParser
+    internal static class HeaderDateParser
     {
         /// <summary>
         /// Parses header date/time strings as described here:
@@ -30,7 +30,7 @@ namespace Usenet.Nntp.Parsers
             string dateTime = valueParts.Length == 2 ? valueParts[1] : valueParts[0];
 
             // remove obsolete whitespace from time part
-            dateTime = Regex.Replace(dateTime, @"\s:\s", ":");
+            dateTime = Regex.Replace(dateTime, @"\s+:\s+", ":");
 
             string[] dateTimeParts = dateTime.Split(new[] {' ', '\n', '\r', '\t'}, StringSplitOptions.RemoveEmptyEntries);
             if (dateTimeParts.Length != 5)
