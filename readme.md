@@ -2,7 +2,7 @@
 
 A library for working with [Usenet](https://en.wikipedia.org/wiki/Usenet). It offers:
 * an [NNTP](https://en.wikipedia.org/wiki/Network_News_Transfer_Protocol) client
-* an [NZB](https://en.wikipedia.org/wiki/NZB) file parser and builder
+* an [NZB](https://en.wikipedia.org/wiki/NZB) file parser, builder and writer
 * a [yEnc](https://en.wikipedia.org/wiki/YEnc) encoder and decoder
 
 It is mainly focused on keeping memory usage low. Server responses can be enumerated as they come in. 
@@ -87,7 +87,7 @@ foreach (NzbFile file in nzbDocument.Files)
     }
 }
 ```
-Build an NZB document:
+Build an NZB document and write to file:
 ```csharp
 IFileProvider fileProvider = new PhysicalFileProvider(Path.GetFullPath("testdata"));
 
@@ -104,6 +104,13 @@ foreach (string fileName in fileNames)
 }
 
 NzbDocument nzbDocument = builder.Build();
+
+using (FileStream file = File.Open("Pictures.nzb"))
+using (var writer = new StreamWriter(file, UsenetEncoding.Default))
+{
+    await writer.WriteNzbDocumentAsync(nzbDocument);
+}
+
 ```
 Encode the files from an NZB document in yEnc format and upload streaming:
 ```csharp
@@ -146,8 +153,9 @@ client.Quit();
 ### Release 2.0.0 ###
 #### New ####
 - Added a streaming YencEncoder.
-- Added an NzbBuilder.
-- Added an NzbWriter. Added extension methods WriteNzbDocument and WriteNzbDocumentAsync to TextWriter for
+- Added an NzbBuilder. Can be used to build an NzbDocument.
+- Added an NzbWriter. Can be used to write an NzbDocument to stream. 
+  Added extension methods WriteNzbDocument and WriteNzbDocumentAsync to TextWriter for
   ease of use.
 - Added an NntpGroups type which represents a collection of newsgroups.
 - Added an NntpGroupsBuilder to build NntpGroups collections. Used in the NntpArticleBuilder and NzbBuilder.
