@@ -26,13 +26,16 @@ namespace Usenet.Nntp
         private NntpStreamReader reader;
 
         /// <inheritdoc/>
+        public CountingStream Stream { get; private set; }
+
+        /// <inheritdoc/>
         public async Task<TResponse> ConnectAsync<TResponse>(string hostname, int port, bool useSsl, IResponseParser<TResponse> parser)
         {
             log.LogInformation("Connecting: {hostname} {port} (Use SSl = {useSsl})", hostname, port, useSsl);
             await client.ConnectAsync(hostname, port);
-            Stream stream = await GetStreamAsync(hostname, useSsl);
-            writer = new StreamWriter(stream, UsenetEncoding.Default) { AutoFlush = true };
-            reader = new NntpStreamReader(stream, UsenetEncoding.Default);
+            Stream = await GetStreamAsync(hostname, useSsl);
+            writer = new StreamWriter(Stream, UsenetEncoding.Default) { AutoFlush = true };
+            reader = new NntpStreamReader(Stream, UsenetEncoding.Default);
             return GetResponse(parser);
         }
 
@@ -90,16 +93,16 @@ namespace Usenet.Nntp
             }
         }
 
-        private async Task<Stream> GetStreamAsync(string hostname, bool useSsl)
+        private async Task<CountingStream> GetStreamAsync(string hostname, bool useSsl)
         {
             NetworkStream stream = client.GetStream();
             if (!useSsl)
             {
-                return stream;
+                return new CountingStream(stream);
             }
             var sslStream = new SslStream(stream);
             await sslStream.AuthenticateAsClientAsync(hostname);
-            return sslStream;
+            return new CountingStream(sslStream);
         }
 
         private IEnumerable<string> ReadMultiLineDataBlock()
