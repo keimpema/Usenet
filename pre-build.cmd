@@ -1,1 +1,1 @@
-GitVersion /output buildserver
+GitVersion /output buildserver /nofetch
