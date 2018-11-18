@@ -128,6 +128,8 @@ namespace UsenetTests.Nntp.Writers
             lines.Add(line);
         }
 
+        public CountingStream Stream => throw  new NotImplementedException();
+
         public TResponse GetResponse<TResponse>(IResponseParser<TResponse> parser)
         {
             throw new NotImplementedException();

@@ -21,5 +21,23 @@ namespace Usenet.Nntp
         {
             this.connection = connection.ThrowIfNull(nameof(connection));
         }
+
+        /// <summary>
+        /// The number of bytes read.
+        /// </summary>
+        public long NrBytesRead => connection.Stream?.NrBytesRead ?? 0;
+
+        /// <summary>
+        /// The number of bytes written.
+        /// </summary>
+        public long NrBytesWritten => connection.Stream?.NrBytesWritten ?? 0;
+
+        /// <summary>
+        /// Resets the counters.
+        /// </summary>
+        public void ResetCounters()
+        {
+            connection.Stream?.ResetCounters();
+        }
     }
 }

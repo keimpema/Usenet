@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Usenet.Nntp.Parsers;
+using Usenet.Util;
 
 namespace Usenet.Nntp
 {
@@ -51,5 +52,10 @@ namespace Usenet.Nntp
         /// </summary>
         /// <param name="line">The line to send to the usenet server.</param>
         void WriteLine(string line);
+
+        /// <summary>
+        /// The stream used by the connection.
+        /// </summary>
+        CountingStream Stream { get; }
     }
 }
