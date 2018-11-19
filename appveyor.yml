@@ -9,7 +9,7 @@ build_script:
   - ps: dotnet --version
   - ps: dotnet restore
   - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
-  - ps: dotnet build Usenet.sln --configuration %CONFIGURATION% --no-restore
+  - ps: dotnet build Usenet.sln --configuration $env:CONFIGURATION --no-restore
   - ps: dotnet test test/UsenetTests/UsenetTests.csproj --no-build --no-restore
-  - ps: nuget pack src/Usenet/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%" --no-build --no-restore
-  - ps: appveyor PushArtifact "Usenet.%GitVersion_NuGetVersion%.nupkg"
+  - ps: nuget pack src/Usenet/Usenet.csproj -version $env:%GitVersion_NuGetVersion -prop "target=$env:CONFIGURATION" --no-build --no-restore
+  - ps: appveyor PushArtifact "Usenet.$env:GitVersion_NuGetVersion.nupkg"
