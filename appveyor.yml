@@ -5,7 +5,7 @@ assembly_info:
 
 before_build:
   - cmd: dotnet restore
-  - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /updateAssemblyInfo /nofetch /b $env:APPVEYOR_REPO_BRANCH
+  - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
 
 build:
   project: Usenet.sln
