@@ -10,8 +10,10 @@ before_build:
   - cmd: dotnet restore
   - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
 
-build:
+build_script:
   - cmd: dotnet build Usenet.sln --configuration %CONFIGURATION% --no-restore
+  
+test_script:
   - cmd: dotnet test test/UsenetTests/UsenetTests.csproj
 
 after_build:
