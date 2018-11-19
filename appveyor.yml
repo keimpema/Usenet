@@ -26,7 +26,6 @@ deploy:
     on:
       APPVEYOR_REPO_TAG: false
 
-deploy:
   - provider: NuGet
     server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
     api_key:
