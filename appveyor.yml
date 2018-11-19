@@ -22,7 +22,7 @@ deploy:
       secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
     skip_symbols: false
     symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-    artifact: src/Usenet/*.nupkg
+    artifact: src\Usenet\*.nupkg
     on:
       APPVEYOR_REPO_TAG: false
 
