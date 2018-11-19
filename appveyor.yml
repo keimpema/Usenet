@@ -1,15 +1,16 @@
-version: 1.0.{build}
-
 image: Visual Studio 2017
 
-init:
-  gitversion /output buildserver
+assembly_info:
+  patch: false
 
 before_build:
   - cmd: dotnet restore
+  - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /updateAssemblyInfo /nofetch /b $env:APPVEYOR_REPO_BRANCH
 
 build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  include_nuget_references: true
-  verbosity: minimal
+  project: Usenet.sln
+
+after_build:
+  - cmd: ECHO nuget pack **/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+  - cmd: nuget pack **/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+  - cmd: appveyor PushArtifact "Usenet.%GitVersion_NuGetVersion%.nupkg"
