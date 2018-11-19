@@ -16,10 +16,23 @@ build_script:
   #- ps: nuget push "src/Usenet/Usenet.$env:GitVersion_NuGetVersion.nupkg" -ApiKey  -Source https://ci.appveyor.com/nuget/keimpema/api/v2/package
 
 deploy:
-  provider: NuGet
-  server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-  api_key:
-    secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
-  skip_symbols: false
-  symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-  artifact: src/Usenet/*.nupkg
+  - provider: NuGet
+    server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
+    api_key:
+      secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
+    skip_symbols: false
+    symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
+    artifact: src/Usenet/*.nupkg
+    on:
+      APPVEYOR_REPO_TAG: false
+
+deploy:
+  - provider: NuGet
+    server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
+    api_key:
+      secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
+    skip_symbols: false
+    symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
+    artifact: src/Usenet/*.nupkg
+    on:
+      APPVEYOR_REPO_TAG: true
