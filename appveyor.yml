@@ -13,6 +13,5 @@ build:
   project: Usenet.sln
 
 after_build:
-  - cmd: ECHO nuget pack **/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
-  - cmd: nuget pack **/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
+  - cmd: nuget pack src/Usenet/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
   - cmd: appveyor PushArtifact "Usenet.%GitVersion_NuGetVersion%.nupkg"
