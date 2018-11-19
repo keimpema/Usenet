@@ -6,11 +6,13 @@ assembly_info:
 configuration: Release
 
 before_build:
+  - cmd: dotnet --version
   - cmd: dotnet restore
   - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
 
 build:
-  project: Usenet.sln
+  - cmd: dotnet build Usenet.sln --configuration %CONFIGURATION% --no-restore
+  - cmd: dotnet test test/UsenetTests/UsenetTests.csproj
 
 after_build:
   - cmd: nuget pack src/Usenet/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
