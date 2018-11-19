@@ -1,0 +1,15 @@
+version: 1.0.{build}
+
+image: Visual Studio 2017
+
+init:
+  gitversion /output buildserver
+
+before_build:
+  - cmd: dotnet restore
+
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  verbosity: minimal
