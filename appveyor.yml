@@ -3,6 +3,8 @@ image: Visual Studio 2017
 assembly_info:
   patch: false
 
+configuration: Release
+
 before_build:
   - cmd: dotnet restore
   - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
