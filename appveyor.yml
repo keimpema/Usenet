@@ -22,14 +22,14 @@ deploy:
       secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
     skip_symbols: false
     symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-    artifact: src/Usenet/Usenet.$env:GitVersion_NuGetVersion.nupkg
+    artifact: src/Usenet/*.nupkg
     on:
       APPVEYOR_REPO_TAG: false
 
-  - provider: NuGet
-    api_key:
-      secure: Ss+pRjef7XQAz9mXsQXc0sutreSME2A8btR+m36HlN3xLwHi5uNXI+d6CANFrBFQ
-    skip_symbols: false
-    artifact: src/Usenet/Usenet.$env:GitVersion_NuGetVersion.nupkg
-    on:
-      APPVEYOR_REPO_TAG: true
+#  - provider: NuGet
+#    api_key:
+#      secure: Ss+pRjef7XQAz9mXsQXc0sutreSME2A8btR+m36HlN3xLwHi5uNXI+d6CANFrBFQ
+#    skip_symbols: false
+#    artifact: src/Usenet/Usenet.$env:GitVersion_NuGetVersion.nupkg
+#    on:
+#      APPVEYOR_REPO_TAG: true
