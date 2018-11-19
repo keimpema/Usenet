@@ -12,4 +12,4 @@ build_script:
   - ps: dotnet build Usenet.sln --configuration $env:CONFIGURATION --no-restore
   - ps: dotnet test test/UsenetTests/UsenetTests.csproj --no-build --no-restore
   - ps: dotnet pack src/Usenet/Usenet.csproj --output . --no-build --no-restore --configuration $env:CONFIGURATION -p:version=$env:GitVersion_NuGetVersion
-  - ps: appveyor PushArtifact "Usenet.$env:GitVersion_NuGetVersion.nupkg"
+  - ps: appveyor PushArtifact "src/Usenet/Usenet.$env:GitVersion_NuGetVersion.nupkg"
