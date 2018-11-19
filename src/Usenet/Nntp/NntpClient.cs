@@ -25,12 +25,12 @@ namespace Usenet.Nntp
         /// <summary>
         /// The number of bytes read.
         /// </summary>
-        public long NrBytesRead => connection.Stream?.NrBytesRead ?? 0;
+        public long BytesRead => connection.Stream?.BytesRead ?? 0;
 
         /// <summary>
         /// The number of bytes written.
         /// </summary>
-        public long NrBytesWritten => connection.Stream?.NrBytesWritten ?? 0;
+        public long BytesWritten => connection.Stream?.BytesWritten ?? 0;
 
         /// <summary>
         /// Resets the counters.
