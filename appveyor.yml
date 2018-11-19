@@ -5,17 +5,11 @@ assembly_info:
 
 configuration: Release
 
-before_build:
-  - cmd: dotnet --version
-  - cmd: dotnet restore
-  - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
-
 build_script:
-  - cmd: dotnet build Usenet.sln --configuration %CONFIGURATION% --no-restore
-  
-test_script:
-  - cmd: dotnet test test/UsenetTests/UsenetTests.csproj
-
-after_build:
-  - cmd: nuget pack src/Usenet/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
-  - cmd: appveyor PushArtifact "Usenet.%GitVersion_NuGetVersion%.nupkg"
+  - ps: dotnet --version
+  - ps: dotnet restore
+  - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
+  - ps: dotnet build Usenet.sln --configuration %CONFIGURATION% --no-restore
+  - ps: dotnet test test/UsenetTests/UsenetTests.csproj --no-build --no-restore
+  - ps: nuget pack src/Usenet/Usenet.csproj -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%" --no-build --no-restore
+  - ps: appveyor PushArtifact "Usenet.%GitVersion_NuGetVersion%.nupkg"
