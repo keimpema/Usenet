@@ -12,12 +12,12 @@ namespace Usenet.Util
         /// <summary>
         /// The number of bytes read.
         /// </summary>
-        public long NrBytesRead { get; private set; }
+        public long BytesRead { get; private set; }
 
         /// <summary>
         /// The number of bytes written.
         /// </summary>
-        public long NrBytesWritten { get; private set; }
+        public long BytesWritten { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="CountingStream"/> class.
@@ -40,8 +40,8 @@ namespace Usenet.Util
             int bytesRead = innerStream.Read(buffer, offset, count);
             unchecked
             {
-                NrBytesRead += bytesRead;
-                if (NrBytesRead < 0)
+                BytesRead += bytesRead;
+                if (BytesRead < 0)
                 {
                     ResetCounters();
                 }
@@ -55,8 +55,8 @@ namespace Usenet.Util
             innerStream.Write(buffer, offset, count);
             unchecked
             {
-                NrBytesWritten += count;
-                if (NrBytesWritten < 0)
+                BytesWritten += count;
+                if (BytesWritten < 0)
                 {
                     ResetCounters();
                 }
@@ -74,8 +74,8 @@ namespace Usenet.Util
         /// </summary>
         public void ResetCounters()
         {
-            NrBytesRead = 0;
-            NrBytesWritten = 0;
+            BytesRead = 0;
+            BytesWritten = 0;
         }
     }
 }
