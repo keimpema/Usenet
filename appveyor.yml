@@ -10,8 +10,8 @@ build_script:
   - ps: dotnet restore
   - ps: gitversion $env:APPVEYOR_BUILD_FOLDER /l console /output buildserver /nofetch /b $env:APPVEYOR_REPO_BRANCH
   - ps: dotnet build Usenet.sln --configuration $env:CONFIGURATION --no-restore
-  - ps: dotnet test test/UsenetTests/UsenetTests.csproj --no-build --no-restore
-  - ps: dotnet pack src/Usenet/Usenet.csproj --output . --no-build --no-restore --configuration $env:CONFIGURATION -p:version=$env:GitVersion_NuGetVersion
+  - ps: dotnet test UsenetTests/UsenetTests.csproj --no-build --no-restore
+  - ps: dotnet pack Usenet/Usenet.csproj --output . --no-build --no-restore --configuration $env:CONFIGURATION -p:version=$env:GitVersion_NuGetVersion
 
 artifacts:
   - path: '**\Usenet.*.nupkg'

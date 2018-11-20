@@ -10,7 +10,7 @@ Binary messages will be encoded to yEnc format streaming and yEnc-encoded data w
 
 The NNTP client is compliant with [RFC 2980](https://tools.ietf.org/html/rfc2980), [RFC 3977](https://tools.ietf.org/html/rfc3977), [RFC 4643](https://tools.ietf.org/html/rfc4643) and [RFC 6048](https://tools.ietf.org/html/rfc6048).
 
-[![keimpema MyGet Build Status](https://www.myget.org/BuildSource/Badge/keimpema?identifier=5a545640-4681-43a6-8c40-3f7bec5f2006)](https://www.myget.org/)
+[![Build status](https://ci.appveyor.com/api/projects/status/5kp5xbcr03xwpb6t?svg=true)](https://ci.appveyor.com/project/keimpema/usenet)
 
 ## Getting Started ##
 Install [Nuget](https://www.nuget.org/packages/Usenet) package:
@@ -150,13 +150,17 @@ client.Quit();
 ```
 
 ## Release Notes ##
+### Release 3.0.0 ###
+#### New ####
+- Added a CountingStream that counts the number of bytes read and written. These properties are made available through the NntpClient as BytesRead and BytesWritten.
+#### Changes ####
+- LibLog is used for logging now. The LibraryLogging class is removed. The target framework had to be upped to netstandard2.0 for this.
+- new NntpMessageId(null) will be converted to an empty string value.
 ### Release 2.0.0 ###
 #### New ####
 - Added a streaming YencEncoder.
-- Added an NzbBuilder. Can be used to build an NzbDocument.
-- Added an NzbWriter. Can be used to write an NzbDocument to stream. 
-  Added extension methods WriteNzbDocument and WriteNzbDocumentAsync to TextWriter for
-  ease of use.
+- Added an NzbBuilder. Can be used to build NzbDocuments.
+- Added an NzbWriter. Can be used to write NzbDocuments to a stream. Extended TextWriter with methods WriteNzbDocument and WriteNzbDocumentAsync for ease of use.
 - Added an NntpGroups type which represents a collection of newsgroups.
 - Added an NntpGroupsBuilder to build NntpGroups collections. Used in the NntpArticleBuilder and NzbBuilder.
 #### Changes ####
