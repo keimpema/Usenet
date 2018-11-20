@@ -153,6 +153,7 @@ client.Quit();
 ### Release 3.0.0 ###
 #### New ####
 - Added a CountingStream that counts the number of bytes read and written. These properties are made available through the NntpClient as BytesRead and BytesWritten.
+  To reset the counters call method ResetCounters(). 
 #### Changes ####
 - LibLog is used for logging now. The LibraryLogging class is removed. The target framework had to be upped to netstandard2.0 for this.
 - new NntpMessageId(null) will be converted to an empty string value.
