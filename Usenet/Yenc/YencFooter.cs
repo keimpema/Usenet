@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Represents the yEnc footer (=yend) line.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     public class YencFooter
     {

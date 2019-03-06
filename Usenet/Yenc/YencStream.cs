@@ -5,6 +5,7 @@ namespace Usenet.Yenc
 {
     /// <summary>
     /// Represents a decoded yEnc-encoded article as a stream.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     public class YencStream : EnumerableStream
     {

@@ -7,6 +7,7 @@ namespace Usenet.Extensions
 {
     /// <summary>
     /// Dictionary extension methods.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     internal static class DictionaryExtensions
     {

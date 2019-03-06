@@ -6,6 +6,7 @@ namespace Usenet.Nzb
 {
     /// <summary>
     /// Represents a segment of a file in a <a href="https://sabnzbd.org/wiki/extra/nzb-spec">NZB</a> document.
+    /// Based on Kristian Hellang's Nzb project https://github.com/khellang/Nzb.
     /// </summary>
     public class NzbSegment : IEquatable<NzbSegment>
     {

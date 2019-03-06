@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Defines <a href="https://sabnzbd.org/wiki/extra/nzb-spec">NZB</a> xml elements and attributes.
+    /// Based on Kristian Hellang's Nzb project https://github.com/khellang/Nzb.
     /// </summary>
     internal class NzbKeywords
     {

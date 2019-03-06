@@ -3,6 +3,7 @@
     /// <summary>
     /// Represents the combined information of the yEnc header (=ybegin) line 
     /// and the yEnc part header (=ypart) line if present.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     public class YencHeader
     {

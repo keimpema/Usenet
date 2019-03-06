@@ -4,6 +4,7 @@ namespace Usenet.Nntp.Responses
 {
     /// <summary>
     /// Represents a generic multi-line response.
+    /// Based on Kristian Hellang's NntpLib.Net project https://github.com/khellang/NntpLib.Net.
     /// </summary>
     public class NntpMultiLineResponse : NntpResponse
     {

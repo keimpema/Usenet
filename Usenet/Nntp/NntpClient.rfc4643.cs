@@ -4,6 +4,9 @@ using Usenet.Util;
 
 namespace Usenet.Nntp
 {
+    /// <summary>
+    /// Based on Kristian Hellang's NntpLib.Net project https://github.com/khellang/NntpLib.Net.
+    /// </summary>
     public partial class NntpClient
     {
         /// <summary>

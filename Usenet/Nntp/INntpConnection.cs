@@ -7,6 +7,7 @@ namespace Usenet.Nntp
 {
     /// <summary>
     /// Represents an NNTP connection.
+    /// Based on Kristian Hellang's NntpLib.Net project https://github.com/khellang/NntpLib.Net.
     /// </summary>
     public interface INntpConnection : IDisposable
     {

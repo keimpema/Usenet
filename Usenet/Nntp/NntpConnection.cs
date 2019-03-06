@@ -14,6 +14,7 @@ namespace Usenet.Nntp
 {
     /// <summary>
     /// A standard implementation of an NNTP connection.
+    /// Based on Kristian Hellang's NntpLib.Net project https://github.com/khellang/NntpLib.Net.
     /// </summary>
     /// <remarks>This implementation of the <see cref="INntpConnection"/> interface does support SSL encryption but
     /// does not support compressed multi-line results.</remarks>

@@ -8,6 +8,7 @@ namespace Usenet.Nntp
     /// <a href="https://tools.ietf.org/html/rfc3977">RFC 3977</a>,
     /// <a href="https://tools.ietf.org/html/rfc4643">RFC 4643</a> and
     /// <a href="https://tools.ietf.org/html/rfc6048">RFC 6048</a>.
+    /// Based on Kristian Hellang's NntpLib.Net project https://github.com/khellang/NntpLib.Net.
     /// </summary>
     public partial class NntpClient
     {
