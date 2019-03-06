@@ -1,5 +1,9 @@
 ﻿namespace Usenet.Util
 {
+    /// <summary>
+    /// Utiliy class for calculating CRC-32 checksums.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
+    /// </summary>
     internal static class Crc32
     {
         private const uint polynomial = 0xEDB88320;

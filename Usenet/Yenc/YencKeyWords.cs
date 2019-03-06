@@ -1,5 +1,9 @@
 ﻿namespace Usenet.Yenc
 {
+    /// <summary>
+    /// yEnc keywords
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
+    /// </summary>
     internal class YencKeywords
     {
         public const string YBegin = "=ybegin";

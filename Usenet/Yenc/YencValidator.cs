@@ -5,6 +5,7 @@ namespace Usenet.Yenc
 {
     /// <summary>
     /// Represents a yEnc-encoded article validator.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     public class YencValidator
     {

@@ -1,5 +1,9 @@
 ﻿namespace Usenet.Yenc
 {
+    /// <summary>
+    /// yEnc validation error codes.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
+    /// </summary>
     internal class YencValidationErrorCodes
     {
         public const string MissingChecksum = "MissingChecksum";

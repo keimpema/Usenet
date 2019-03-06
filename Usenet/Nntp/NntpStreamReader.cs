@@ -7,6 +7,7 @@ namespace Usenet.Nntp
     /// <summary>
     /// This NNTP streamreader respects the <a href="https://tools.ietf.org/html/rfc3977#section-3.1.1">rules</a> for multi-line data blocks.
     /// It will undo dot-stuffing and will stop at the terminating line (".").
+    /// Based on Kristian Hellang's NntpLib.Net project https://github.com/khellang/NntpLib.Net.
     /// </summary>
     public class NntpStreamReader : StreamReader
     {

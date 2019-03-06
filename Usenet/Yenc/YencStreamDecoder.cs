@@ -9,6 +9,7 @@ namespace Usenet.Yenc
     /// <summary>
     /// Represents a yEnc-encoded article decoder.
     /// The article is decoded streaming.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     public static class YencStreamDecoder
     {

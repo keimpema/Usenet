@@ -8,6 +8,7 @@ namespace Usenet.Yenc
     /// <summary>
     /// Represents a yEnc-encoded article decoder.
     /// The article is completely decoded in memory.
+    /// Based on Kristian Hellang's yEnc project https://github.com/khellang/yEnc.
     /// </summary>
     public class YencArticleDecoder
     {

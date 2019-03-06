@@ -148,3 +148,14 @@ Close connection:
 ```csharp
 client.Quit();
 ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Acknowledgments
+
+This project was heavily inspired by [Kristian Hellang](https://github.com/khellang)'s work:
+* [khellang/yEnc](https://github.com/khellang/yEnc)
+* [khellang/nntplib.net](https://github.com/khellang/nntplib.net)
+* [khellang/Nzb](https://github.com/khellang/Nzb)
