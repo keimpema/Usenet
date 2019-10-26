@@ -330,7 +330,7 @@ namespace Usenet.Nntp
         /// posted or received since this date and time.</param>
         /// <returns>A multi-line response containing a list of message-ids.</returns>
         public NntpMultiLineResponse NewNews(string wildmat, NntpDateTime sinceDateTime) =>
-            connection.MultiLineCommand($"NEWNEWS {sinceDateTime}", new MultiLineResponseParser(230));
+            connection.MultiLineCommand($"NEWNEWS {wildmat} {sinceDateTime}", new MultiLineResponseParser(230));
 
 
         /// <summary>
