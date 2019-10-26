@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Usenet.Nntp.Parsers;
 using Xunit;
 
@@ -53,7 +54,7 @@ namespace UsenetTests.Nntp.Parsers
         {
             DateTimeOffset yesterday = new DateTimeOffset(DateTime.UtcNow.Date.AddDays(-1), TimeSpan.Zero);
             DateTimeOffset expectedDate = yesterday;
-            string headerValue = $"{yesterday:dd MMM yy HH:mm:ss} +0000";
+            string headerValue = yesterday.ToString("dd MMM yy HH:mm:ss", CultureInfo.InvariantCulture) + " +0000";
             DateTimeOffset actualDate = HeaderDateParser.Parse(headerValue).GetValueOrDefault();
             Assert.Equal(expectedDate, actualDate);
         }
@@ -63,7 +64,7 @@ namespace UsenetTests.Nntp.Parsers
         {
             DateTimeOffset tomorrow = new DateTimeOffset(DateTime.UtcNow.Date.AddDays(+1), TimeSpan.Zero);
             DateTimeOffset expectedDate = tomorrow.AddYears(-100);
-            string headerValue = $"{tomorrow:dd MMM yy HH:mm:ss} +0000";
+            string headerValue = tomorrow.ToString("dd MMM yy HH:mm:ss", CultureInfo.InvariantCulture) + " +0000";
             DateTimeOffset actualDate = HeaderDateParser.Parse(headerValue).GetValueOrDefault();
             Assert.Equal(expectedDate, actualDate);
         }
@@ -73,7 +74,7 @@ namespace UsenetTests.Nntp.Parsers
         {
             var today = new DateTimeOffset(DateTime.UtcNow.Date, TimeSpan.Zero);
             DateTimeOffset expectedDate = today;
-            string headerValue = $"{expectedDate:dd MMM yy HH:mm:ss} +0000";
+            string headerValue = expectedDate.ToString("dd MMM yy HH:mm:ss", CultureInfo.InvariantCulture) + " +0000";
             DateTimeOffset actualDate = HeaderDateParser.Parse(headerValue).GetValueOrDefault();
             Assert.Equal(expectedDate, actualDate);
         }
