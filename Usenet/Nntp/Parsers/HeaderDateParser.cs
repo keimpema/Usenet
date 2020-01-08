@@ -33,7 +33,7 @@ namespace Usenet.Nntp.Parsers
             dateTime = Regex.Replace(dateTime, @"\s+:\s+", ":");
 
             string[] dateTimeParts = dateTime.Split(new[] {' ', '\n', '\r', '\t'}, StringSplitOptions.RemoveEmptyEntries);
-            if (dateTimeParts.Length != 5)
+            if (dateTimeParts.Length != 5 && (dateTimeParts.Length != 6 || dateTimeParts[5] != "(UTC)"))
             {
                 throw new FormatException(Resources.Nntp.BadHeaderDateFormat);
             }
@@ -77,8 +77,8 @@ namespace Usenet.Nntp.Parsers
         {
             DateTime today = DateTime.UtcNow.Date;
             int currentCentury = today.Year / 100;
-            return new DateTime(currentCentury * 100 + year, month, day, 0, 0, 0, DateTimeKind.Utc) > today 
-                ? currentCentury - 1 
+            return new DateTime(currentCentury * 100 + year, month, day, 0, 0, 0, DateTimeKind.Utc) > today
+                ? currentCentury - 1
                 : currentCentury;
         }
 
@@ -106,16 +106,70 @@ namespace Usenet.Nntp.Parsers
 
         private static TimeSpan ParseZone(string value)
         {
-            int zoneSign = value[0] == '-' ? -1 : 1;
-            if (!int.TryParse(value, out int zone))
+            // The time zone must be as specified in RFC822, https://tools.ietf.org/html/rfc822#section-5
+
+            if (!short.TryParse(value, out short zone))
             {
-                // todo: parse obs-zone
+                switch (value)
+                {
+                    // UTC is not specified in RFC822, but allowing it since it is commonly used
+                    case "UTC":
+                    case "UT":
+                    case "GMT":
+                    case "Z":
+                        break;
+
+                    case "EDT":
+                        zone = -0400;
+                        break;
+
+                    case "EST":
+                    case "CDT":
+                        zone = -0500;
+                        break;
+
+                    case "CST":
+                    case "MDT":
+                        zone = -0600;
+                        break;
+
+                    case "MST":
+                    case "PDT":
+                        zone = -0700;
+                        break;
+
+                    case "PST":
+                        zone = -0800;
+                        break;
+
+                    case "A":
+                        zone = -0100;
+                        break;
+
+                    case "N":
+                        zone = +0100;
+                        break;
+
+                    case "M":
+                        zone = -1200;
+                        break;
+
+                    case "Y":
+                        zone = +1200;
+                        break;
+
+                    default:
+                        throw new FormatException(Resources.Nntp.BadHeaderDateFormat);
+                }
+            }
+            else if (-9999 > zone || zone > 9999)
+            {
                 throw new FormatException(Resources.Nntp.BadHeaderDateFormat);
             }
-            zone = Math.Abs(zone);
+
             int minute = zone % 100;
             int hour = zone / 100;
-            return TimeSpan.FromMinutes(zoneSign * (hour * 60 + minute));
+            return TimeSpan.FromMinutes(hour * 60 + minute);
         }
     }
 }

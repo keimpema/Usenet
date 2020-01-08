@@ -12,6 +12,8 @@ namespace UsenetTests.Nntp.Parsers
         {
             new object[] {"01 May 2017 13:55:33 +0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
             new object[] {"01 May 2017 13:55:33 -0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
+            new object[] {"01 May 2017 13:55:33 +0000 (UTC)", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
+            new object[] {"01 May 2017 13:55:33 -0000 (UTC)", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
             new object[] {"01 May 2017 13:55:33 +0100", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.FromHours(1))},
             new object[] {"01 May 2017 13:55:33 -0100", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.FromHours(-1))},
 
@@ -31,7 +33,29 @@ namespace UsenetTests.Nntp.Parsers
             new object[] {"1 Nov 2017 00:00:00 +0000", new DateTimeOffset(2017, 11, 1, 0, 0, 0, TimeSpan.Zero)},
             new object[] {"1 Dec 2017 00:00:00 +0000", new DateTimeOffset(2017, 12, 1, 0, 0, 0, TimeSpan.Zero)},
 
-            new object[] {"01 May 2017 13 : 55 : 33 +0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)}
+            // Valid timezone formats
+            new object[] {"1 Jan 2020 00:00:00 UTC", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero)},
+            new object[] {"1 Jan 2020 00:00:00 UT", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero)},
+            new object[] {"1 Jan 2020 00:00:00 GMT", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero)},
+            new object[] {"1 Jan 2020 00:00:00 Z", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero)},
+            new object[] {"1 Jan 2020 00:00:00 EDT", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-04))},
+            new object[] {"1 Jan 2020 00:00:00 EST", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-05))},
+            new object[] {"1 Jan 2020 00:00:00 CDT", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-05))},
+            new object[] {"1 Jan 2020 00:00:00 CST", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-06))},
+            new object[] {"1 Jan 2020 00:00:00 MDT", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-06))},
+            new object[] {"1 Jan 2020 00:00:00 MST", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-07))},
+            new object[] {"1 Jan 2020 00:00:00 PDT", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-07))},
+            new object[] {"1 Jan 2020 00:00:00 PST", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-08))},
+            new object[] {"1 Jan 2020 00:00:00 A", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-01))},
+            new object[] {"1 Jan 2020 00:00:00 N", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(+01))},
+            new object[] {"1 Jan 2020 00:00:00 M", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-12))},
+        };
+
+        public static IEnumerable<object[]> TimezoneParseFailureData = new[]
+        {
+            new object[] {"1 Jan 2020 00:00:00 BAD", typeof(FormatException)},
+            new object[] {"1 Jan 2020 00:00:00 -10000", typeof(FormatException)},
+            new object[] {"1 Jan 2020 00:00:00 +10000", typeof(FormatException)},
         };
 
         public static IEnumerable<object[]> CenturyData = new[]
@@ -47,6 +71,13 @@ namespace UsenetTests.Nntp.Parsers
         {
             DateTimeOffset? actualDateTime = HeaderDateParser.Parse(headerDate);
             Assert.Equal(expectedDateTime, actualDateTime);
+        }
+
+        [Theory]
+        [MemberData(nameof(TimezoneParseFailureData))]
+        public void HeaderDateShouldBeNotBeParsedCorrectly(string headerDate, Type exceptionType)
+        {
+            Assert.Throws(exceptionType, () => HeaderDateParser.Parse(headerDate));
         }
 
         [Fact]
