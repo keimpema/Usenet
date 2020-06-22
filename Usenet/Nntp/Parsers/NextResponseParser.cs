@@ -1,12 +1,12 @@
 ﻿using System;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Responses;
 
 namespace Usenet.Nntp.Parsers
 {
     internal class NextResponseParser : IResponseParser<NntpNextResponse>
     {
-        private static readonly ILog log = LogProvider.For<NextResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<NextResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == (int) NntpNextResponseType.ArticleExists;
 
@@ -18,7 +18,7 @@ namespace Usenet.Nntp.Parsers
 
             if (responseType == NntpNextResponseType.Unknown)
             {
-                log.Error("Invalid response code: {Code}", code);
+                log.LogError("Invalid response code: {Code}", code);
             }
 
             if (!IsSuccessResponse(code))
@@ -30,7 +30,7 @@ namespace Usenet.Nntp.Parsers
             string[] responseSplit = message.Split(' ');
             if (responseSplit.Length < 2)
             {
-                log.Error("Invalid response message: {Message} Expected: {{number}} {{messageid}}", message);
+                log.LogError("Invalid response message: {Message} Expected: {{number}} {{messageid}}", message);
             }
 
             long.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out long number);

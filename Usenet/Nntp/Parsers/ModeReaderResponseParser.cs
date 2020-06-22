@@ -1,12 +1,12 @@
 ﻿using System;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Responses;
 
 namespace Usenet.Nntp.Parsers
 {
     internal class ModeReaderResponseParser : IResponseParser<NntpModeReaderResponse>
     {
-        private static readonly ILog log = LogProvider.For<ModeReaderResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<ModeReaderResponseParser>();
 
         public bool IsSuccessResponse(int code) => GetResponseType(code) != NntpModeReaderResponseType.Unknown;
 
@@ -16,7 +16,7 @@ namespace Usenet.Nntp.Parsers
             bool success = responseType != NntpModeReaderResponseType.Unknown;
             if (!success)
             {
-                log.Error("Invalid response code: {Code}", code);
+                log.LogError("Invalid response code: {Code}", code);
             }
             return new NntpModeReaderResponse(code, message, success, responseType);
         }

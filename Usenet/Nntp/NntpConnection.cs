@@ -5,7 +5,7 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Usenet.Exceptions;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Parsers;
 using Usenet.Nntp.Responses;
 using Usenet.Util;
@@ -20,7 +20,7 @@ namespace Usenet.Nntp
     /// does not support compressed multi-line results.</remarks>
     public class NntpConnection : INntpConnection
     {
-        private static readonly ILog log = LogProvider.For<NntpConnection>();
+        private static readonly ILogger log = LibraryLogging.Create<NntpConnection>();
 
         private readonly TcpClient client = new TcpClient();
         private StreamWriter writer;
@@ -32,7 +32,7 @@ namespace Usenet.Nntp
         /// <inheritdoc/>
         public async Task<TResponse> ConnectAsync<TResponse>(string hostname, int port, bool useSsl, IResponseParser<TResponse> parser)
         {
-            log.Info("Connecting: {hostname} {port} (Use SSl = {useSsl})", hostname, port, useSsl);
+            log.LogInformation("Connecting: {hostname} {port} (Use SSl = {useSsl})", hostname, port, useSsl);
             await client.ConnectAsync(hostname, port);
             Stream = await GetStreamAsync(hostname, useSsl);
             writer = new StreamWriter(Stream, UsenetEncoding.Default) { AutoFlush = true };
@@ -44,7 +44,7 @@ namespace Usenet.Nntp
         public TResponse Command<TResponse>(string command, IResponseParser<TResponse> parser)
         {
             ThrowIfNotConnected();
-            log.Info("Sending command: {Command}",command.StartsWith("AUTHINFO PASS", StringComparison.Ordinal) ? "AUTHINFO PASS [omitted]" : command);
+            log.LogInformation("Sending command: {Command}",command.StartsWith("AUTHINFO PASS", StringComparison.Ordinal) ? "AUTHINFO PASS [omitted]" : command);
             writer.WriteLine(command);
             return GetResponse(parser);
         }
@@ -65,7 +65,7 @@ namespace Usenet.Nntp
         public TResponse GetResponse<TResponse>(IResponseParser<TResponse> parser)
         {
             string responseText = reader.ReadLine();
-            log.Info("Response received: {Response}", responseText);
+            log.LogInformation("Response received: {Response}", responseText);
 
             if (responseText == null)
             {

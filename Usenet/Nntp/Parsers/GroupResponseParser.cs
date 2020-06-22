@@ -1,4 +1,4 @@
-﻿using Usenet.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
 
@@ -6,7 +6,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class GroupResponseParser : IResponseParser<NntpGroupResponse>
     {
-        private static readonly ILog log = LogProvider.For<GroupResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<GroupResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 211;
 
@@ -22,7 +22,7 @@ namespace Usenet.Nntp.Parsers
             string[] responseSplit = message.Split(' ');
             if (responseSplit.Length < 4)
             {
-                log.Error("Invalid response message: {Message} Expected: {{count}} {{low}} {{high}} {{group}}", message);
+                log.LogError("Invalid response message: {Message} Expected: {{count}} {{low}} {{high}} {{group}}", message);
             }
 
             long.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out long articleCount);

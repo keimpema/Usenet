@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
 
@@ -9,7 +9,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class GroupOriginsResponseParser : IMultiLineResponseParser<NntpGroupOriginsResponse>
     {
-        private static readonly ILog log = LogProvider.For<GroupOriginsResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<GroupOriginsResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 215;
 
@@ -43,7 +43,7 @@ namespace Usenet.Nntp.Parsers
                 string[] lineSplit = line.Split(' ');
                 if (lineSplit.Length < 3)
                 {
-                    log.Error("Invalid newsgroup origin line: {Line} Expected: {{group}} {{timestamp}} {{createdby}}", line);
+                    log.LogError("Invalid newsgroup origin line: {Line} Expected: {{group}} {{timestamp}} {{createdby}}", line);
                     continue;
                 }
 
