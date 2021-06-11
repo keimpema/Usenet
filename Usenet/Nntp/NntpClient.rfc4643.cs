@@ -27,8 +27,10 @@ namespace Usenet.Nntp
             }
             if (userResponse.Code != 381 || string.IsNullOrWhiteSpace(password))
             {
+                System.Console.WriteLine($"{userResponse.Code} - {userResponse.Message}");
                 return false;
             }
+            
             NntpResponse passResponse = connection.Command($"AUTHINFO PASS {password}", new ResponseParser(281));
             return passResponse.Success;
         }

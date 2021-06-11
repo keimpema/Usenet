@@ -66,7 +66,7 @@ namespace Usenet.Nntp
         {
             string responseText = reader.ReadLine();
             log.Info("Response received: {Response}", responseText);
-
+            
             if (responseText == null)
             {
                 throw new NntpException("Received no response.");

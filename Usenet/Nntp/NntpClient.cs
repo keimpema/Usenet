@@ -21,6 +21,8 @@ namespace Usenet.Nntp
         public NntpClient(INntpConnection connection)
         {
             this.connection = connection.ThrowIfNull(nameof(connection));
+
+            Common.NntpExtensions.IncrementClientCount();
         }
 
         /// <summary>
