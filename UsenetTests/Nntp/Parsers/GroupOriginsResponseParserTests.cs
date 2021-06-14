@@ -4,6 +4,7 @@ using System.Linq;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Parsers;
 using Usenet.Nntp.Responses;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nntp.Parsers

@@ -16,7 +16,7 @@ namespace Usenet.Nntp.Builders
     /// </summary>
     public class NntpArticleBuilder
     {
-        private static readonly ILogger log = LibraryLogging.Create<NntpArticleBuilder>();
+        private readonly ILogger log = Logger.Create<NntpArticleBuilder>();
 
         private const string dateFormat = "dd MMM yyyy HH:mm:ss";
 

@@ -8,7 +8,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class ListGroupResponseParser : IMultiLineResponseParser<NntpGroupResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<ListGroupResponseParser>();
+        private readonly ILogger log = Logger.Create<ListGroupResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 211;
 

@@ -6,7 +6,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class NextResponseParser : IResponseParser<NntpNextResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<NextResponseParser>();
+        private readonly ILogger log = Logger.Create<NextResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == (int) NntpNextResponseType.ArticleExists;
 

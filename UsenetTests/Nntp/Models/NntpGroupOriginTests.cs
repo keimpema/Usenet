@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Usenet.Nntp.Models;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nntp.Models

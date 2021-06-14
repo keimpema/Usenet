@@ -6,7 +6,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class GroupResponseParser : IResponseParser<NntpGroupResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<GroupResponseParser>();
+        private readonly ILogger log = Logger.Create<GroupResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 211;
 

@@ -20,8 +20,7 @@ namespace Usenet.Nntp
     /// does not support compressed multi-line results.</remarks>
     public class NntpConnection : INntpConnection
     {
-        private static readonly ILogger log = LibraryLogging.Create<NntpConnection>();
-
+        private readonly ILogger log = Logger.Create<NntpConnection>();
         private readonly TcpClient client = new TcpClient();
         private StreamWriter writer;
         private NntpStreamReader reader;

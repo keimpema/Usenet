@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Usenet.Nntp.Builders;
 using Xunit;
 
@@ -9,15 +10,15 @@ namespace UsenetTests.Nntp.Builders
         [Fact]
         public void AddNullShouldResultInEmptyCollection()
         {
-            NntpGroupsBuilder builder = new NntpGroupsBuilder().Add((string)null);
-            Assert.Equal(new string[0], builder.Groups);
+            NntpGroupsBuilder builder = new NntpGroupsBuilder().Add((string?)null);
+            Assert.Equal(Array.Empty<string>(), builder.Groups);
         }
 
         [Fact]
         public void AddNullEnumerableShouldResultInEmptyCollection()
         {
-            NntpGroupsBuilder builder = new NntpGroupsBuilder().Add((IEnumerable<string>)null);
-            Assert.Equal(new string[0], builder.Groups);
+            NntpGroupsBuilder builder = new NntpGroupsBuilder().Add((IEnumerable<string>?)null);
+            Assert.Equal(Array.Empty<string>(), builder.Groups);
         }
 
         [Fact]

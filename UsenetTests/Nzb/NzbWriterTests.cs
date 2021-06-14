@@ -3,6 +3,7 @@ using Microsoft.Extensions.FileProviders;
 using Usenet.Nzb;
 using Usenet.Util;
 using UsenetTests.Extensions;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nzb
@@ -13,7 +14,7 @@ namespace UsenetTests.Nzb
 
         public NzbWriterTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(NzbWriterTests));
+            this.testData = testData;
         }
 
         [Theory]
@@ -24,18 +25,17 @@ namespace UsenetTests.Nzb
             IFileInfo file = testData.GetEmbeddedFile(fileName);
             NzbDocument expected = NzbParser.Parse(file.ReadAllText(UsenetEncoding.Default));
 
-            using (var stream = new MemoryStream())
-            using (var writer = new StreamWriter(stream, UsenetEncoding.Default))
-            using (var reader = new StreamReader(stream, UsenetEncoding.Default))
-            {
-                // write to file and read back for comparison
-                writer.WriteNzbDocument(expected);
-                stream.Position = 0;
-                NzbDocument actual = NzbParser.Parse(reader.ReadToEnd());
+            using var stream = new MemoryStream();
+            using var writer = new StreamWriter(stream, UsenetEncoding.Default);
+            using var reader = new StreamReader(stream, UsenetEncoding.Default);
 
-                // compare
-                Assert.Equal(expected, actual);
-            }
+            // write to file and read back for comparison
+            writer.WriteNzbDocument(expected);
+            stream.Position = 0;
+            NzbDocument actual = NzbParser.Parse(reader.ReadToEnd());
+
+            // compare
+            Assert.Equal(expected, actual);
         }
     }
 }

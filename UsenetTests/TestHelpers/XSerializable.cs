@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Xunit.Abstractions;
 
-namespace UsenetTests
+namespace UsenetTests.TestHelpers
 {
     public class XSerializable<T> : IXunitSerializable
     {
@@ -9,6 +9,7 @@ namespace UsenetTests
 
         public XSerializable()
         {
+            Object = default!;
         }
 
         public XSerializable(T objectToSerialize)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Usenet.Nntp.Models;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nntp.Models

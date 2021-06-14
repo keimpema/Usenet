@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.FileProviders;
 using Usenet.Nzb;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nzb
@@ -11,7 +12,7 @@ namespace UsenetTests.Nzb
 
         public NzbBuilderTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(NzbBuilderTests));
+            this.testData = testData;
         }
 
         [Theory]

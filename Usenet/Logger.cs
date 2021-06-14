@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Usenet
 {
@@ -6,7 +7,7 @@ namespace Usenet
     /// Host for a singleton <see cref="ILoggerFactory"/>
     /// (<a href="https://stackify.com/net-core-loggerfactory-use-correctly/">Source</a>).
     /// </summary>
-    public static class LibraryLogging
+    public static class Logger
     {
         private static ILoggerFactory factoryInstance;
 
@@ -15,7 +16,7 @@ namespace Usenet
         /// </summary>
         public static ILoggerFactory Factory
         {
-            get => factoryInstance ?? (factoryInstance = new LoggerFactory());
+            get => factoryInstance ?? (factoryInstance = new NullLoggerFactory());
             set => factoryInstance = value;
         }
 

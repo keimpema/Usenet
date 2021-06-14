@@ -4,6 +4,7 @@ using System.Linq;
 using Usenet.Util;
 using Usenet.Yenc;
 using UsenetTests.Extensions;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Yenc
@@ -14,7 +15,7 @@ namespace UsenetTests.Yenc
 
         public YencEncoderTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(YencEncoderTests));
+            this.testData = testData;
         }
 
         [Fact]
@@ -28,13 +29,13 @@ namespace UsenetTests.Yenc
                 .ToList();
 
             byte[] data = testData.GetEmbeddedFile(@"yenc.singlepart.test (1.2).dat").ReadAllBytes();
-            using (var stream = new MemoryStream(data))
-            {
-                var header = new YencHeader("test (1.2).txt", data.Length, 10, 0, 1, data.Length, 0);
-                List<string> actualText = YencEncoder.Encode(header, stream).ToList();
+            
+            using var stream = new MemoryStream(data);
+            
+            var header = new YencHeader("test (1.2).txt", data.Length, 10, 0, 1, data.Length, 0);
+            List<string> actualText = YencEncoder.Encode(header, stream).ToList();
 
-                Assert.Equal(expectedText, actualText);
-            }
+            Assert.Equal(expectedText, actualText);
         }
 
         [Fact]
@@ -48,13 +49,13 @@ namespace UsenetTests.Yenc
                 .ToList();
 
             byte[] data = testData.GetEmbeddedFile(@"yenc.multipart.test (1.2).dat").ReadAllBytes();
-            using (var stream = new MemoryStream(data))
-            {
-                var header = new YencHeader("test (1.2).txt", 120, 10, 1, 2, data.Length, 0);
-                List<string> actualText = YencEncoder.Encode(header, stream).ToList();
+            
+            using var stream = new MemoryStream(data);
+            
+            var header = new YencHeader("test (1.2).txt", 120, 10, 1, 2, data.Length, 0);
+            List<string> actualText = YencEncoder.Encode(header, stream).ToList();
 
-                Assert.Equal(expectedText, actualText);
-            }
+            Assert.Equal(expectedText, actualText);
         }
 
     }

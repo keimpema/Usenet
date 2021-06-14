@@ -16,7 +16,7 @@ namespace Usenet.Nntp.Parsers
     {
         private readonly int successCode;
         private readonly GroupStatusRequestType requestType;
-        private static readonly ILogger log = LibraryLogging.Create<GroupsResponseParser>();
+        private readonly ILogger log = Logger.Create<GroupsResponseParser>();
 
         public GroupsResponseParser(int successCode, GroupStatusRequestType requestType)
         {

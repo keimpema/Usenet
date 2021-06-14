@@ -3,6 +3,7 @@ using Usenet.Extensions;
 using Usenet.Util;
 using Usenet.Yenc;
 using UsenetTests.Extensions;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Yenc
@@ -13,7 +14,7 @@ namespace UsenetTests.Yenc
 
         public YencStreamDecoderTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(YencStreamDecoderTests));
+            this.testData = testData;
         }
 
         [Fact]
@@ -57,19 +58,18 @@ namespace UsenetTests.Yenc
             YencStream part2 = YencStreamDecoder.Decode(
                 testData.GetEmbeddedFile(@"yenc.multipart.00000021.ntx").ReadAllLines(UsenetEncoding.Default));
 
-            using (var actual = new MemoryStream())
-            {
-                actual.Seek(part1.Header.PartOffset, SeekOrigin.Begin);
-                part1.CopyTo(actual);
+            using var actual = new MemoryStream();
 
-                actual.Seek(part2.Header.PartOffset, SeekOrigin.Begin);
-                part2.CopyTo(actual);
+            actual.Seek(part1.Header.PartOffset, SeekOrigin.Begin);
+            part1.CopyTo(actual);
 
-                string actualFileName = part1.Header.FileName;
+            actual.Seek(part2.Header.PartOffset, SeekOrigin.Begin);
+            part2.CopyTo(actual);
 
-                Assert.Equal(expectedFileName, actualFileName);
-                Assert.Equal(expected, actual.ToArray());
-            }
+            string actualFileName = part1.Header.FileName;
+
+            Assert.Equal(expectedFileName, actualFileName);
+            Assert.Equal(expected, actual.ToArray());
         }
 
     }

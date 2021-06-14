@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Usenet.Nntp.Models;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nntp.Models
@@ -16,14 +17,14 @@ namespace UsenetTests.Nntp.Models
         [Fact]
         public void ConstructWithNullShouldReturnEmptyString()
         {
-            var groups = new NntpGroups((string)null);
+            var groups = new NntpGroups((string?)null);
             Assert.Equal("", groups.ToString());
         }
 
         [Fact]
         public void ConstructWithNullEnumerableShouldReturnEmptyString()
         {
-            var groups = new NntpGroups((IEnumerable<string>)null);
+            var groups = new NntpGroups((IEnumerable<string>?)null);
             Assert.Equal("", groups.ToString());
         }
 
@@ -41,7 +42,7 @@ namespace UsenetTests.Nntp.Models
             Assert.Equal("group1", groups.ToString());
         }
 
-        public static IEnumerable<object[]> EqualsWithSameValues = new[]
+        public static readonly IEnumerable<object[]> EqualsWithSameValues = new[]
         {
             new object[]
             {

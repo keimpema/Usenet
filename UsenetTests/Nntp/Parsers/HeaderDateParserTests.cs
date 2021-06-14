@@ -8,7 +8,7 @@ namespace UsenetTests.Nntp.Parsers
 {
     public class HeaderDateParserTests
     {
-        public static IEnumerable<object[]> ParseData = new[]
+        public static readonly IEnumerable<object[]> ParseData = new[]
         {
             new object[] {"01 May 2017 13:55:33 +0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
             new object[] {"01 May 2017 13:55:33 -0000", new DateTimeOffset(2017, 5, 1, 13, 55, 33, TimeSpan.Zero)},
@@ -51,14 +51,14 @@ namespace UsenetTests.Nntp.Parsers
             new object[] {"1 Jan 2020 00:00:00 M", new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.FromHours(-12))},
         };
 
-        public static IEnumerable<object[]> TimezoneParseFailureData = new[]
+        public static readonly IEnumerable<object[]> TimezoneParseFailureData = new[]
         {
             new object[] {"1 Jan 2020 00:00:00 BAD", typeof(FormatException)},
             new object[] {"1 Jan 2020 00:00:00 -10000", typeof(FormatException)},
             new object[] {"1 Jan 2020 00:00:00 +10000", typeof(FormatException)},
         };
 
-        public static IEnumerable<object[]> CenturyData = new[]
+        public static readonly IEnumerable<object[]> CenturyData = new[]
         {
             new object[] {$"01 May 16 13:55:33 +0000", new DateTimeOffset(2016, 5, 1, 13, 55, 33, TimeSpan.Zero)},
             new object[] {$"01 May 99 13:55:33 +0000", new DateTimeOffset(1999, 5, 1, 13, 55, 33, TimeSpan.Zero)},
@@ -83,7 +83,7 @@ namespace UsenetTests.Nntp.Parsers
         [Fact]
         public void ObsoleteTwoDigitYearBeforeCurrentDateShouldBeParsedCorrectly()
         {
-            DateTimeOffset yesterday = new DateTimeOffset(DateTime.UtcNow.Date.AddDays(-1), TimeSpan.Zero);
+            DateTimeOffset yesterday = new(DateTime.UtcNow.Date.AddDays(-1), TimeSpan.Zero);
             DateTimeOffset expectedDate = yesterday;
             string headerValue = yesterday.ToString("dd MMM yy HH:mm:ss", CultureInfo.InvariantCulture) + " +0000";
             DateTimeOffset actualDate = HeaderDateParser.Parse(headerValue).GetValueOrDefault();
@@ -93,7 +93,7 @@ namespace UsenetTests.Nntp.Parsers
         [Fact]
         public void ObsoleteTwoDigitYearAfterCurrentDateShouldBeParsedCorrectly()
         {
-            DateTimeOffset tomorrow = new DateTimeOffset(DateTime.UtcNow.Date.AddDays(+1), TimeSpan.Zero);
+            DateTimeOffset tomorrow = new(DateTime.UtcNow.Date.AddDays(+1), TimeSpan.Zero);
             DateTimeOffset expectedDate = tomorrow.AddYears(-100);
             string headerValue = tomorrow.ToString("dd MMM yy HH:mm:ss", CultureInfo.InvariantCulture) + " +0000";
             DateTimeOffset actualDate = HeaderDateParser.Parse(headerValue).GetValueOrDefault();

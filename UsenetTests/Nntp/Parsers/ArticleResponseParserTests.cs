@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Parsers;
 using Usenet.Nntp.Responses;
 using Usenet.Util;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nntp.Parsers
 {
     public class ArticleResponseParserTests
     {
-        public static IEnumerable<object[]> MultiLineParseData = new[]
+        public static readonly IEnumerable<object[]> MultiLineParseData = new[]
         {
             new object[]
             {
                 220, "123 <123@poster.com>", (int) ArticleRequestType.Article,
-                new string[0],
+                Array.Empty<string>(),
                 new XSerializable<NntpArticle>(new NntpArticle(123, "<123@poster.com>", null, null,
                     new List<string>(0)))
             },
@@ -104,23 +106,23 @@ namespace UsenetTests.Nntp.Parsers
             Assert.Equal(expectedArticle, actualArticle);
         }
 
-        public static IEnumerable<object[]> InvalidMultiLineParseData = new[]
+        public static readonly IEnumerable<object[]> InvalidMultiLineParseData = new[]
         {
             new object[]
             {
-                412, "No newsgroup selected", (int) ArticleRequestType.Article, new string[0],
+                412, "No newsgroup selected", (int) ArticleRequestType.Article, Array.Empty<string>(),
             },
             new object[]
             {
-                420, "No current article selected", (int) ArticleRequestType.Article, new string[0],
+                420, "No current article selected", (int) ArticleRequestType.Article, Array.Empty<string>(),
             },
             new object[]
             {
-                423, "No article with that number", (int) ArticleRequestType.Article, new string[0],
+                423, "No article with that number", (int) ArticleRequestType.Article, Array.Empty<string>(),
             },
             new object[]
             {
-                430, "No such article found", (int) ArticleRequestType.Article, new string[0],
+                430, "No such article found", (int) ArticleRequestType.Article, Array.Empty<string>(),
             }
         };
 

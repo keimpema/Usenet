@@ -6,7 +6,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class ModeReaderResponseParser : IResponseParser<NntpModeReaderResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<ModeReaderResponseParser>();
+        private readonly ILogger log = Logger.Create<ModeReaderResponseParser>();
 
         public bool IsSuccessResponse(int code) => GetResponseType(code) != NntpModeReaderResponseType.Unknown;
 

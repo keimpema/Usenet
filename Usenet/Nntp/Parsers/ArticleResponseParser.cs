@@ -19,8 +19,7 @@ namespace Usenet.Nntp.Parsers
 
     internal class ArticleResponseParser : IMultiLineResponseParser<NntpArticleResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<ArticleResponseParser>();
-
+        private readonly ILogger log = Logger.Create<ArticleResponseParser>();
         private readonly ArticleRequestType requestType;
         private readonly int successCode;
 
@@ -100,7 +99,7 @@ namespace Usenet.Nntp.Parsers
             }
         }
 
-        private static MultiValueDictionary<string, string> GetHeaders(IEnumerator<string> enumerator)
+        private MultiValueDictionary<string, string> GetHeaders(IEnumerator<string> enumerator)
         {
             var headers = new List<Header>();
             Header prevHeader = null;

@@ -3,6 +3,7 @@ using System.Linq;
 using Usenet.Util;
 using Usenet.Yenc;
 using UsenetTests.Extensions;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Yenc
@@ -13,7 +14,7 @@ namespace UsenetTests.Yenc
 
         public YencArticleDecoderTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(YencArticleDecoderTests));
+            this.testData = testData;
         }
 
         [Fact]
@@ -56,19 +57,18 @@ namespace UsenetTests.Yenc
             YencArticle part2 = YencArticleDecoder.Decode(
                 testData.GetEmbeddedFile(@"yenc.multipart.00000021.ntx").ReadAllLines(UsenetEncoding.Default));
 
-            using (var actual = new MemoryStream())
-            {
-                actual.Seek(part1.Header.PartOffset, SeekOrigin.Begin);
-                actual.Write(part1.Data.ToArray(), 0, (int)part1.Header.PartSize);
+            using var actual = new MemoryStream();
 
-                actual.Seek(part2.Header.PartOffset, SeekOrigin.Begin);
-                actual.Write(part2.Data.ToArray(), 0, (int)part2.Header.PartSize);
+            actual.Seek(part1.Header.PartOffset, SeekOrigin.Begin);
+            actual.Write(part1.Data.ToArray(), 0, (int)part1.Header.PartSize);
 
-                string actualFileName = part1.Header.FileName;
+            actual.Seek(part2.Header.PartOffset, SeekOrigin.Begin);
+            actual.Write(part2.Data.ToArray(), 0, (int)part2.Header.PartSize);
 
-                Assert.Equal(expectedFileName, actualFileName);
-                Assert.Equal(expected, actual.ToArray());
-            }
+            string actualFileName = part1.Header.FileName;
+
+            Assert.Equal(expectedFileName, actualFileName);
+            Assert.Equal(expected, actual.ToArray());
         }
     }
 }

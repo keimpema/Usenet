@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Usenet.Nntp.Models;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nntp.Models
@@ -30,7 +31,7 @@ namespace UsenetTests.Nntp.Models
             Assert.Equal(expected, actual);
         }
 
-        public static IEnumerable<object[]> EqualsWithSameValues = new[]
+        public static readonly IEnumerable<object[]> EqualsWithSameValues = new[]
         {
             new object[]
             {
@@ -55,7 +56,7 @@ namespace UsenetTests.Nntp.Models
         {
             Assert.Equal(range1.Object, range2.Object);
         }
-        public static IEnumerable<object[]> EqualsWithDifferentValues = new[]
+        public static readonly IEnumerable<object[]> EqualsWithDifferentValues = new[]
         {
             new object[]
             {

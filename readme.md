@@ -26,7 +26,12 @@ await client.ConnectAsync(hostname, port, useSsl);
 ```
 Authenticate:
 ```csharp
-client.Authenticate(username, password)
+client.Authenticate(username, password);
+```
+Enable logging:
+```csharp
+ILoggerFactory factory = new SomeLoggerFactory();
+Usenet.Logger.Factory = factory;
 ```
 Retrieve article:
 ```csharp

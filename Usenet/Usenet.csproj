@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Usenet</RootNamespace>
+    <AssemblyName>Usenet</AssemblyName>
     <Authors>Harmen van Keimpema</Authors>
     <Company />
     <Description>A library for working with Usenet. It offers an NNTP client, an NZB file parser, builder, writer, a yEnc encoder and decoder. It is mainly focused on keeping memory usage low. Server responses can be enumerated as they come in. Binary messages will be encoded to yEnc format streaming and yEnc-encoded data will be decoded to binary data streaming.</Description>
@@ -25,12 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-    <PackageReference Include="System.Net.Security" Version="4.3.2" />
   </ItemGroup>
 
   <ItemGroup>

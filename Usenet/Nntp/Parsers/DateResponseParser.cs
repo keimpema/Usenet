@@ -7,7 +7,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class DateResponseParser : IResponseParser<NntpDateResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<DateResponseParser>();
+        private readonly ILogger log = Logger.Create<DateResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 111;
 

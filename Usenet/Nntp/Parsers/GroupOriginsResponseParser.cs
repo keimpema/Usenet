@@ -9,7 +9,7 @@ namespace Usenet.Nntp.Parsers
 {
     internal class GroupOriginsResponseParser : IMultiLineResponseParser<NntpGroupOriginsResponse>
     {
-        private static readonly ILogger log = LibraryLogging.Create<GroupOriginsResponseParser>();
+        private static readonly ILogger log = Logger.Create<GroupOriginsResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 215;
 

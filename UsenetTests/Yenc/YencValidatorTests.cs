@@ -2,6 +2,7 @@
 using Usenet.Util;
 using Usenet.Yenc;
 using UsenetTests.Extensions;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Yenc
@@ -12,7 +13,7 @@ namespace UsenetTests.Yenc
 
         public YencValidatorTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(YencValidatorTests));
+            this.testData = testData;
         }
 
         [Theory]

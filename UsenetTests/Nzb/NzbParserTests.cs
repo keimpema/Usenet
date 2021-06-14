@@ -5,6 +5,7 @@ using Usenet.Exceptions;
 using Usenet.Nzb;
 using Usenet.Util;
 using UsenetTests.Extensions;
+using UsenetTests.TestHelpers;
 using Xunit;
 
 namespace UsenetTests.Nzb
@@ -15,7 +16,7 @@ namespace UsenetTests.Nzb
 
         public NzbParserTests(TestData testData)
         {
-            this.testData = testData.Initialize(typeof(NzbParserTests));
+            this.testData = testData;
         }
 
         [Theory]
