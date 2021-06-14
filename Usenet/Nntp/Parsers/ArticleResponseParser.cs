@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Builders;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
@@ -19,7 +19,7 @@ namespace Usenet.Nntp.Parsers
 
     internal class ArticleResponseParser : IMultiLineResponseParser<NntpArticleResponse>
     {
-        private static readonly ILog log = LogProvider.For<ArticleResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<ArticleResponseParser>();
 
         private readonly ArticleRequestType requestType;
         private readonly int successCode;
@@ -58,7 +58,7 @@ namespace Usenet.Nntp.Parsers
             string[] responseSplit = message.Split(' ');
             if (responseSplit.Length < 2)
             {
-                log.Error("Invalid response message: {Message} Expected: {{number}} {{messageid}}", message);
+                log.LogError("Invalid response message: {Message} Expected: {{number}} {{messageid}}", message);
             }
 
             long.TryParse(responseSplit.Length > 0 ? responseSplit[0] : null, out long number);
@@ -121,7 +121,7 @@ namespace Usenet.Nntp.Parsers
                     int splitPos = line.IndexOf(':');
                     if (splitPos < 0)
                     {
-                        log.Error("Invalid header line: {Line} Expected: {{key}}:{{value}}", line);
+                        log.LogError("Invalid header line: {Line} Expected: {{key}}:{{value}}", line);
                     }
                     else
                     {

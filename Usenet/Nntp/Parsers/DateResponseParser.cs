@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Globalization;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Responses;
 
 namespace Usenet.Nntp.Parsers
 {
     internal class DateResponseParser : IResponseParser<NntpDateResponse>
     {
-        private static readonly ILog log = LogProvider.For<DateResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<DateResponseParser>();
 
         public bool IsSuccessResponse(int code) => code == 111;
 
@@ -21,7 +21,7 @@ namespace Usenet.Nntp.Parsers
                 return new NntpDateResponse(code, message, true, dateTime);
             }
             
-            log.Error("Invalid response message: {Message} Expected: {{yyyymmddhhmmss}}", message);
+            log.LogError("Invalid response message: {Message} Expected: {{yyyymmddhhmmss}}", message);
             return new NntpDateResponse(code, message, false, DateTimeOffset.MinValue);
         }
     }

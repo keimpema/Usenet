@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Nntp.Responses;
 
@@ -16,7 +16,7 @@ namespace Usenet.Nntp.Parsers
     {
         private readonly int successCode;
         private readonly GroupStatusRequestType requestType;
-        private static readonly ILog log = LogProvider.For<GroupsResponseParser>();
+        private static readonly ILogger log = LibraryLogging.Create<GroupsResponseParser>();
 
         public GroupsResponseParser(int successCode, GroupStatusRequestType requestType)
         {
@@ -61,7 +61,7 @@ namespace Usenet.Nntp.Parsers
                 string[] lineSplit = line.Split(' ');
                 if (lineSplit.Length < checkParameterCount)
                 {
-                    log.Error(errorMessage, line);
+                    log.LogError(errorMessage, line);
                     continue;
                 }
 
@@ -78,7 +78,7 @@ namespace Usenet.Nntp.Parsers
                 NntpPostingStatus postingStatus = PostingStatusParser.Parse(lineSplit[argCount], out string otherGroup);
                 if (postingStatus == NntpPostingStatus.Unknown)
                 {
-                    log.Error("Invalid posting status {Status} in line: {Line}", lineSplit[argCount], line);
+                    log.LogError("Invalid posting status {Status} in line: {Line}", lineSplit[argCount], line);
                 }
 
                 yield return new NntpGroup(

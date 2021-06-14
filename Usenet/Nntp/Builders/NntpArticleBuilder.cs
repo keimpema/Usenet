@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Usenet.Exceptions;
 using Usenet.Extensions;
-using Usenet.Logging;
+using Microsoft.Extensions.Logging;
 using Usenet.Nntp.Models;
 using Usenet.Util;
 
@@ -16,7 +16,7 @@ namespace Usenet.Nntp.Builders
     /// </summary>
     public class NntpArticleBuilder
     {
-        private static readonly ILog log = LogProvider.For<NntpArticleBuilder>();
+        private static readonly ILogger log = LibraryLogging.Create<NntpArticleBuilder>();
 
         private const string dateFormat = "dd MMM yyyy HH:mm:ss";
 
@@ -78,7 +78,7 @@ namespace Usenet.Nntp.Builders
                             }
                             else
                             {
-                                log.Warn("Found more than 1 {messageId} header. Skipping it.", NntpHeaders.MessageId);
+                                log.LogWarning("Found more than 1 {messageId} header. Skipping it.", NntpHeaders.MessageId);
                             }
                             break;
 
@@ -89,7 +89,7 @@ namespace Usenet.Nntp.Builders
                             }
                             else
                             {
-                                log.Warn("Found more than 1 {from} header. Skipping it.", NntpHeaders.From);
+                                log.LogWarning("Found more than 1 {from} header. Skipping it.", NntpHeaders.From);
                             }
                             break;
 
@@ -100,7 +100,7 @@ namespace Usenet.Nntp.Builders
                             }
                             else
                             {
-                                log.Warn("Found more than 1 {subject} header. Skipping it.", NntpHeaders.Subject);
+                                log.LogWarning("Found more than 1 {subject} header. Skipping it.", NntpHeaders.Subject);
                             }
                             break;
 
@@ -115,12 +115,12 @@ namespace Usenet.Nntp.Builders
                                 }
                                 else
                                 {
-                                    log.Warn("{date} header has invalid value {value}. Skipping it.", NntpHeaders.Date, value);
+                                    log.LogWarning("{date} header has invalid value {value}. Skipping it.", NntpHeaders.Date, value);
                                 }
                             }
                             else
                             {
-                                log.Warn("Found more than 1 {date} header. Skipping it.", NntpHeaders.Date);
+                                log.LogWarning("Found more than 1 {date} header. Skipping it.", NntpHeaders.Date);
                             }
                             break;
 
