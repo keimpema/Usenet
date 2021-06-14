@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 assembly_info:
   patch: false
@@ -13,11 +13,6 @@ build_script:
   - ps: dotnet test UsenetTests/UsenetTests.csproj --no-build --no-restore
   - ps: dotnet pack Usenet/Usenet.csproj --output . --no-build --no-restore --configuration $env:CONFIGURATION -p:version=$env:GitVersion_NuGetVersion
 
-artifacts:
-  - path: '**\Usenet.*.nupkg'
-    name: usenetpkg
-    type: NuGetPackage
-    
 deploy:
   - provider: NuGet
     server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
@@ -25,7 +20,7 @@ deploy:
       secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
     skip_symbols: false
     symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-    artifact: usenetpkg
+    artifact: /.*(\.|\.s)nupkg/
     on:
       APPVEYOR_REPO_TAG: false
 
@@ -33,6 +28,6 @@ deploy:
     api_key:
       secure: Ss+pRjef7XQAz9mXsQXc0sutreSME2A8btR+m36HlN3xLwHi5uNXI+d6CANFrBFQ
     skip_symbols: false
-    artifact: usenetpkg
+    artifact: /.*(\.|\.s)nupkg/
     on:
       APPVEYOR_REPO_TAG: true
