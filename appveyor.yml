@@ -13,6 +13,10 @@ build_script:
   - ps: dotnet test UsenetTests/UsenetTests.csproj --no-build --no-restore
   - ps: dotnet pack Usenet/Usenet.csproj --output . --no-build --no-restore --configuration $env:CONFIGURATION -p:version=$env:GitVersion_NuGetVersion
 
+artifacts:
+  - path: '**\Usenet.*.nupkg'
+    type: NuGetPackage
+
 deploy:
   - provider: NuGet
     server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
