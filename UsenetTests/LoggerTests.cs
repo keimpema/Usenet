@@ -29,8 +29,9 @@ namespace UsenetTests
 
             Usenet.Logger.Factory = loggerFactoryMock.Object;
             var logger = Usenet.Logger.Create<LoggerTests>();
+            var actualLogger = GetActualLogger(logger);
 
-            Assert.IsType<InMemoryLogger>(logger);
+            Assert.IsType<InMemoryLogger>(actualLogger);
         }
 
         private static object? GetActualLogger(ILogger logger)
