@@ -15,23 +15,24 @@ build_script:
 
 artifacts:
   - path: '**\Usenet.*nupkg'
+    name: UsenetArtifacts
     type: NuGetPackage
 
 deploy:
   - provider: NuGet
-    server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
     api_key:
       secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
-    skip_symbols: false
+    server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
     symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-    artifact: /.*(\.|\.s)nupkg/
+    artifact: UsenetArtifacts
     on:
       APPVEYOR_REPO_TAG: false
 
   - provider: NuGet
     api_key:
       secure: tNQl2nVGPAKl3OVsWJqpCV1Ad3mGBbSsu2M6hCs1zSJlj9M0wkJykvViJFxiJ5cC
-    skip_symbols: false
-    artifact: /.*(\.|\.s)nupkg/
+    server: https://www.nuget.org/api/v2/package
+    symbol_server: https://www.nuget.org/api/v2/package
+    artifact: UsenetArtifacts
     on:
       APPVEYOR_REPO_TAG: true
