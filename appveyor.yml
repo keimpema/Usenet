@@ -23,7 +23,7 @@ deploy:
     api_key:
       secure: kdR0ezKgvtAqExn/40WQ1gKKQ2v3r0UfqgahpsO2jAs=
     server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
-    symbol_server: https://ci.appveyor.com/nuget/keimpema/api/v2/package
+    skip_symbols: true
     artifact: UsenetArtifacts
     on:
       APPVEYOR_REPO_TAG: false
@@ -33,6 +33,7 @@ deploy:
       secure: tNQl2nVGPAKl3OVsWJqpCV1Ad3mGBbSsu2M6hCs1zSJlj9M0wkJykvViJFxiJ5cC
     server: https://www.nuget.org/api/v2/package
     symbol_server: https://www.nuget.org/api/v2/package
+    skip_symbols: false
     artifact: UsenetArtifacts
     on:
       APPVEYOR_REPO_TAG: true
