@@ -14,7 +14,7 @@ build_script:
   - ps: dotnet pack Usenet/Usenet.csproj --output . --no-build --no-restore --configuration $env:CONFIGURATION -p:version=$env:GitVersion_NuGetVersion
 
 artifacts:
-  - path: '**\Usenet.*.nupkg'
+  - path: '**\Usenet.*nupkg'
     type: NuGetPackage
 
 deploy:
