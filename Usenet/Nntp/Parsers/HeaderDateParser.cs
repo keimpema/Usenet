@@ -6,7 +6,17 @@ namespace Usenet.Nntp.Parsers
 {
     internal static class HeaderDateParser
     {
-        private static Regex _dateTimeRegx = new Regex(@"(?:\s*(?<dayName>Sun|Mon|Tue|Wed|Thu|Fri|Sat),)?\s*(?<day>\d{1,2})\s+(?<month>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(?<year>\d{2,4})\s+(?<hour>\d{1,2}):(?<min>\d{1,2})(?::(?<sec>\d{1,2}))?\s*(?<tz>[+-]\d+|(?:UT|UTC|GMT|Z|EDT|EST|CDT|CST|MDT|MST|PDT|PST|A|N|M|Y|[A-Z]+))?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private const string _dateTimeRegexString =
+              @"(?:\s*"
+            + @"(?<dayName>Sun|Mon|Tue|Wed|Thu|Fri|Sat),)?\s*"
+            + @"(?<day>\d{1,2})\s+"
+            + @"(?<month>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+"
+            + @"(?<year>\d{2,4})\s+"
+            + @"(?<hour>\d{1,2}):(?<min>\d{1,2})(?::(?<sec>\d{1,2}))?\s*"
+            + @"(?<tz>[+-]\d+|(?:UT|UTC|GMT|Z|EDT|EST|CDT|CST|MDT|MST|PDT|PST|A|N|M|Y|[A-Z]+)"
+            + @")?";
+
+        private static readonly Regex _dateTimeRegex = new Regex(_dateTimeRegexString, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         /// <summary>
         /// Parses header date/time strings as described in the
@@ -21,10 +31,10 @@ namespace Usenet.Nntp.Parsers
                 return null;
             }
 
-            var matches = _dateTimeRegx.Match(value);
+            var matches = _dateTimeRegex.Match(value);
             if (!matches.Success)
             {
-                throw new FormatException(/*Resources.Nntp.BadHeaderDateFormat*/);
+                throw new FormatException(Resources.Nntp.BadHeaderDateFormat);
             }
 
             var day = int.Parse(matches.Groups["day"].Value);
@@ -64,7 +74,7 @@ namespace Usenet.Nntp.Parsers
             {
                 switch (value)
                 {
-                    // UTC is not specified in RFC822, but allowing it since it is commonly used
+                    // UTC and empty are not specified in RFC822, but allowing them since they are commonly used
                     case "UTC":
                     case "UT":
                     case "GMT":
